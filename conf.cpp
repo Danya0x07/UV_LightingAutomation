@@ -21,6 +21,10 @@ static uint8_t* params[NUM_OF_PARAMS] = {
     &evening_light_hours
 };
 
+static void get_new_params();
+static void send_params();
+static void configure_rtc();
+
 void start_configuring()
 {
     digitalWrite(CONN_LED_pin, 1);
@@ -46,7 +50,7 @@ void start_configuring()
     sound_blink(300, 1);
 }
 
-void get_new_params()
+static void get_new_params()
 {
     while (Serial.available() < NUM_OF_PARAMS);
     for (uint8_t* param: params) {
@@ -54,14 +58,14 @@ void get_new_params()
     }
 }
 
-void send_params()
+static void send_params()
 {
     for (uint8_t* param: params) {
         Serial.write(*param);
     }
 }
 
-void configure_rtc()
+static void configure_rtc()
 {
     while (Serial.available() < 5);
     uint8_t month = Serial.read();
