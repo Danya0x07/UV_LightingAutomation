@@ -37,7 +37,7 @@ void handle_events()
     }
     btn_lcd.refresh();
 
-    if(btn_conf.pressed()) {
+    if (btn_conf.pressed()) {
         start_configuring();
     }
     btn_conf.refresh();
@@ -71,4 +71,3 @@ void watch_period(const uint8_t switch_hour, const uint8_t light_hours, bool& wa
         dt = RTClock.now();
     }
 }
-

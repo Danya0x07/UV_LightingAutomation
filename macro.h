@@ -12,5 +12,4 @@
 #define RTC_GND_pin     A2  // Контакт заземления часов
 #define LCD_LED_pin     12  // Контакт подсветки экрана
 #define CONN_LED_pin    A0  // Контакт индикатора связи
-#define NUM_OF_PARAMS   5
-
+#define NUM_OF_PARAMS   5   // Кол-во настроек

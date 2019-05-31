@@ -26,16 +26,16 @@ void start_configuring()
     digitalWrite(CONN_LED_pin, 1);
     Serial.begin(9600);
     sound_blink(300, 1);
-    while(!btn_conf.pressed())
+    while (!btn_conf.pressed())
     {
         btn_conf.refresh();
-        if(Serial.available()) {
+        if (Serial.available()) {
             char command = Serial.read();
-            if(command == 's') {
+            if (command == 's') {
                 get_new_params();
-            } else if(command == 'g') {
+            } else if (command == 'g') {
                 send_params();
-            } else if(command == 't') {
+            } else if (command == 't') {
                 configure_rtc();
             }
             sound_blink(140, 1);
@@ -48,22 +48,22 @@ void start_configuring()
 
 void get_new_params()
 {
-    while(Serial.available() < NUM_OF_PARAMS);
-    for(uint8_t* param: params) {
+    while (Serial.available() < NUM_OF_PARAMS);
+    for (uint8_t* param: params) {
         *param = Serial.read();
     }
 }
 
 void send_params()
 {
-    for(uint8_t* param: params) {
+    for (uint8_t* param: params) {
         Serial.write(*param);
     }
 }
 
 void configure_rtc()
 {
-    while(Serial.available() < 5);
+    while (Serial.available() < 5);
     uint8_t month = Serial.read();
     uint8_t day   = Serial.read();
     uint8_t hour  = Serial.read();
@@ -71,4 +71,3 @@ void configure_rtc()
     uint8_t sec   = Serial.read();
     RTClock.adjust(DateTime(18ul, month, day, hour, min, sec));
 }
-
