@@ -1,9 +1,10 @@
+#include <Arduino.h>
+#include <EEPROM.h>
+#include <myButtons.h>
+#include <RTClib.h>
 #include "conf.h"
 #include "macro.h"
 #include "util.h"
-#include <Arduino.h>
-#include <myButtons.h>
-#include <RTClib.h>
 
 extern Button btn_conf;
 extern RTC_DS1307 RTClock;
@@ -24,6 +25,16 @@ static uint8_t* params[NUM_OF_PARAMS] = {
 static void get_new_params();
 static void send_params();
 static void configure_rtc();
+
+void setup_conf()
+{
+    for (int i = 0; i < NUM_OF_PARAMS; i++) {
+        uint8_t val = EEPROM[i];
+        if (val != 255) {
+            *params[i] = val;
+        }
+    }
+}
 
 void start_configuring()
 {
@@ -53,8 +64,8 @@ void start_configuring()
 static void get_new_params()
 {
     while (Serial.available() < NUM_OF_PARAMS);
-    for (uint8_t* param: params) {
-        *param = Serial.read();
+    for (int i = 0; i < NUM_OF_PARAMS; i++) {
+        EEPROM[i] = *params[i] = Serial.read();
     }
 }
 

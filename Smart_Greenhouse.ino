@@ -6,6 +6,7 @@
 #include "data.h"
 #include "main_activity.h"
 #include "util.h"
+#include "conf.h"
 
 Button btn_rel(BTN_REL_pin, true);
 Button btn_lcd(BTN_LCD_pin, true);
@@ -39,6 +40,7 @@ void setup()
     digitalWrite(RTC_GND_pin, 0);
     digitalWrite(LCD_LED_pin, 1);
     digitalWrite(13, 0);
+    setup_conf();
     
     RTClock.begin();
     lcd.begin(16, 2);
