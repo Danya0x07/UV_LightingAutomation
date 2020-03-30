@@ -1,6 +1,6 @@
 #include "data.h"
 #include "macro.h"
-#include "relay.hpp"
+#include "Relay.h"
 #include <RTClib.h>
 #include <LiquidCrystal.h>
 
@@ -32,7 +32,7 @@ void update_display()
     lcd.setCursor(7, 0);
     lcd.print(get_current_time());
     lcd.setCursor(15, 0);
-    lcd.print(relay.get_state() ? 'R' : ' ');
+    lcd.print(relay.getState() ? 'R' : ' ');
     lcd.setCursor(7, 1);
     lcd.print(get_light_value());
     lcd.print("%  ");

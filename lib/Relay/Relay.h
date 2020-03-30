@@ -1,4 +1,5 @@
 #pragma once
+
 #include <Arduino.h>
 
 class Relay
@@ -8,25 +9,21 @@ private:
     const bool inverse;
 
 public:
-    Relay(uint8_t p, bool inv = false)
-        : pin(p), inverse(inv)
-    {
-        pinMode(pin, OUTPUT);
-    }
+    Relay(uint8_t pin, bool inverse);
 
-    void set_state(bool state)
+    void setState(bool state)
     {
         digitalWrite(pin, state != inverse);
     }
 
-    bool get_state()
+    bool getState()
     {
         return digitalRead(pin) != inverse;
     }
 
-    void switch_state()
+    void switchState()
     {
-        digitalWrite(pin, !digitalRead(pin));
+        setState(!getState());
     }
 };
 
