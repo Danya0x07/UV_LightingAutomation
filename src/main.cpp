@@ -17,16 +17,19 @@ Button middleButton(11, true);  // кнопка, переключающая ре
 Button rightButton(9, true);    // кнопка, начинающая сеанс настройки
 Relay relay(A1, true);
 Buzzer buzzer(8, false);
+LightSensor lightSensor(A6);
 LiquidCrystal lcd(2, 3, 4, 5, 6, 7);
 Clock rtclock(A3, A2);
-DateTime dt;
+LightingSession morningSession, eveningSession;
 
 void taskCheckButtons(const void* unused)
 {
 
-    for(;;) {
+    for (;;) {
         if (leftButton.hasBeenPressed()) {
-
+            if (leftButton.hasBeenPressedAgain()) {
+                
+            }
         }
 
         if (middleButton.hasBeenPressed()) {
@@ -37,7 +40,34 @@ void taskCheckButtons(const void* unused)
 
         }
 
-        vTaskDelay(50 / portTICK_PERIOD_MS);
+        vTaskDelay(pdMS_TO_TICKS(50));
+    }
+}
+
+void taskPerformLightSessions(const void* unused)
+{
+    DateTime dateTime;
+    uint16_t lightLevel;
+    bool relayMustBeEnabled;
+    bool relayStatusBackup = false;  // Чтобы автоматическое переключение реле не конфликтовала с ручным.
+    
+    for (;;) {
+        dateTime = rtclock.getTime();
+        lightLevel = lightSensor.getValue();
+        relayMustBeEnabled = morningSession.hasToBeUnderway(dateTime, (uint8_t)lightLevel) ||
+                             eveningSession.hasToBeUnderway(dateTime, (uint8_t)lightLevel);
+        if (relayMustBeEnabled) {
+            if (relayStatusBackup == false) {
+                relay.setState(1);
+                relayStatusBackup = true;
+            }
+        } else {
+            if (relayStatusBackup == true) {
+                relay.setState(0);
+                relayStatusBackup = false;
+            }
+        }
+        vTaskDelay(pdMS_TO_TICKS(30000));
     }
 }
 
@@ -56,6 +86,9 @@ void setup()
     lcd.setCursor(0, 1);
     lcd.print("Light:");
     //update_display();
+
+    morningSession.loadFromEeprom(0 * LightingSession::getActualEepromPayloadSize());
+    eveningSession.loadFromEeprom(1 * LightingSession::getActualEepromPayloadSize());
 }
 
 void loop()

@@ -1,4 +1,4 @@
-#include "data.h"
+//#include "data.h"
 #include "macro.h"
 #include "Relay.h"
 #include <RTClib.h>
@@ -13,7 +13,7 @@ extern bool was_evening_light;
 
 uint8_t get_light_value()
 {
-    uint16_t val = analogRead(LS_pin);
+    uint16_t val = analogRead(A6);
     val = map(val, 0, 1023, 0, 100);
     return uint8_t(val);
 }

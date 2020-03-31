@@ -2,9 +2,14 @@
 
 #include <Arduino.h>
 
+/**
+ * Обёртка над аналоговым датчиком освещённости
+ * для удобного считывания значения в нужной размерности 
+ * (по умолчанию 0-100%).
+ */
 class LightSensor
 {
-protected:
+private:
     const uint8_t pin;
 
 public:

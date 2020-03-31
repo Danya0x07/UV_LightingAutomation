@@ -1,6 +1,6 @@
 #include "Buzzer.h"
 
-Buzzer::Buzzer(uint8_t pin, bool inverse) : pin(pin), inverse(inverse)
+Buzzer::Buzzer(uint8_t pin, bool inverse) : pin(pin), inverted(inverse)
 {
     pinMode(pin, OUTPUT);
     stopBuzzing();

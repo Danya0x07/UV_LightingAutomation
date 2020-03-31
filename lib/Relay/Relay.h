@@ -2,23 +2,27 @@
 
 #include <Arduino.h>
 
+/**
+ * Обёртка над реле для инкапсуляции инициализации пинов
+ * и удобного переключения с учётом возможной инверсности управления.
+ */
 class Relay
 {
 private:
     const uint8_t pin;
-    const bool inverse;
+    const bool inverted;
 
 public:
-    Relay(uint8_t pin, bool inverse);
+    Relay(uint8_t pin, bool inverted);
 
     void setState(bool state)
     {
-        digitalWrite(pin, state != inverse);
+        digitalWrite(pin, state != inverted);
     }
 
     bool getState()
     {
-        return digitalRead(pin) != inverse;
+        return digitalRead(pin) != inverted;
     }
 
     void switchState()

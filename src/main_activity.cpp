@@ -1,12 +1,12 @@
 #include <Buttons.h>
 #include <LiquidCrystal.h>
 #include <RTClib.h>
-#include "main_activity.h"
+//#include "main_activity.h"
 #include "macro.h"
-#include "util.h"
+//#include "util.h"
 #include "Relay.h"
-#include "data.h"
-#include "conf.h"
+//#include "data.h"
+//#include "conf.h"
 
 extern Button relayButton;
 extern Button displayButton;

@@ -1,6 +1,6 @@
 #include "Relay.h"
 
-Relay::Relay(uint8_t pin, bool inverse = false) : pin(pin), inverse(inverse)
+Relay::Relay(uint8_t pin, bool inverted = false) : pin(pin), inverted(inverted)
 {
     pinMode(pin, OUTPUT);
     setState(0);
