@@ -22,6 +22,14 @@ public:
     void loadFromEeprom(uint16_t address);
     void saveToEeprom(uint16_t address);
     bool hasToBeUnderway(const DateTime& currentTime, uint8_t lightLevel);
+    
     void setActive(bool active) {isActive = active;}
+    void setLightThreshold(uint8_t);
+    void setStartTime(uint8_t hour, uint8_t minute);
+    void setEndTime(uint8_t hour, uint8_t minute);
+
+    bool operator==(const LightingSession&);
+    bool operator!=(const LightingSession&);
+    
     static uint8_t getActualEepromPayloadSize() { return 6; }
 };

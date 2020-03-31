@@ -21,9 +21,7 @@ public:
      */
     Button(uint8_t pin, bool inverted);
 
-    /** 
-     * Возвращает true, если кнопка зажата в данный момент, иначе false. 
-     */
+    /** Возвращает true, если кнопка зажата в данный момент, иначе false. */
     bool isPressed();
 
     /** 

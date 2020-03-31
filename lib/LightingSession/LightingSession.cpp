@@ -43,3 +43,35 @@ bool LightingSession::hasToBeUnderway(const DateTime& currentTime, uint8_t light
     return isActive && (lightLevel <= lightThreshold) && 
            (relativeTime >= startTime) && (relativeTime < endTime);
 }
+
+void LightingSession::setLightThreshold(uint8_t threshold)
+{
+    lightThreshold = min(threshold, 100);
+}
+
+void LightingSession::setStartTime(uint8_t hour, uint8_t minute)
+{
+    hour = min(hour, 23);
+    minute = min(minute, 59);
+    startTime = DateTime(0, 0, 0, hour, minute, 0);
+}
+
+void LightingSession::setEndTime(uint8_t hour, uint8_t minute)
+{
+    hour = min(hour, 23);
+    minute = min(minute, 59);
+    endTime = DateTime(0, 0, 0, hour, minute, 0);
+}
+
+bool LightingSession::operator==(const LightingSession& other)
+{
+    return this->isActive == other.isActive && 
+           this->lightThreshold == other.lightThreshold &&
+           this->startTime == other.startTime &&
+           this->endTime == other.endTime;
+}
+
+bool LightingSession::operator!=(const LightingSession& other)
+{
+    return !(*this == other);
+}

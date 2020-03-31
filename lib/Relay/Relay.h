@@ -22,7 +22,7 @@ public:
 
     bool getState()
     {
-        return digitalRead(pin) != inverted;
+        return bool(digitalRead(pin)) != inverted;
     }
 
     void switchState()

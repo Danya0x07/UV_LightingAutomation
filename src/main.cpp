@@ -89,6 +89,8 @@ void setup()
 
     morningSession.loadFromEeprom(0 * LightingSession::getActualEepromPayloadSize());
     eveningSession.loadFromEeprom(1 * LightingSession::getActualEepromPayloadSize());
+
+    
 }
 
 void loop()
