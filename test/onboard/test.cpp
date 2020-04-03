@@ -34,6 +34,7 @@ static void testButtons()
 static void testClock()
 {
 #ifdef DEVBOARD
+    /* На отладочной плате нет подключённых RTC. */
     TEST_IGNORE();
 #endif
     DateTime dt = clock.getTime();
@@ -44,7 +45,6 @@ static void testClock()
 
 static void testLightingSession()
 {
-    uint16_t address = 100;
     lightingSession.setActive(true);
     lightingSession.setLightThreshold(33);
     lightingSession.setStartTime(6, 30);
@@ -70,6 +70,7 @@ static void testLightingSession()
      * загруженный по первоначальному адресу сеанс: если они не равны,
      * значит второе сохранение повредило данные первого.
      */
+    uint16_t address = 100;
     lightingSession.saveToEeprom(address);
     lightingSession.saveToEeprom(address + LightingSession::getActualEepromPayloadSize());
     LightingSession otherLightingSession;
