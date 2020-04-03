@@ -14,10 +14,6 @@
 
 #include "macro.h"
 
-static Button leftButton(10, true); // кнопка, пробуждающая дисплей
-static Button middleButton(11, true); // кнопка, переключающая реле
-static Button rightButton(9, true);   // кнопка, начинающая сеанс настройки
-
 static Relay relay(A1, true);
 static Buzzer buzzer(8, false);
 static LightSensor lightSensor(A6);
@@ -26,12 +22,13 @@ static Clock rtclock(A3, A2);
 static LightingSession morningSession, eveningSession;
 
 static TaskHandle_t updateDisplayTaskHandle;
-static TimerHandle_t displayScreenOffTimer;
+static TimerHandle_t disableDisplayTimerHandle;
 
-static void checkButtons(void* unused);
-static void performLightingSessions(void* unused);
-static void updateDisplay(void* unused);
-static void displayScreenOff(TimerHandle_t unused);
+static void checkButtonsTask(void* unused);
+static void performLightingTask(void* unused);
+static void updateDisplayTask(void* unused);
+static void enableDisplay();
+static void disableDisplay(TimerHandle_t unused);
 
 void setup()
 {    
@@ -47,19 +44,19 @@ void setup()
     morningSession.loadFromEeprom(0 * LightingSession::getActualEepromPayloadSize());
     eveningSession.loadFromEeprom(1 * LightingSession::getActualEepromPayloadSize());
 
-    xTaskCreate(checkButtons, "chbtns", 128,
+    xTaskCreate(checkButtonsTask, "chbtns", 128,
                 NULL, 1, NULL);
 
-    xTaskCreate(performLightingSessions, "perfls", 128,
+    xTaskCreate(performLightingTask, "perfls", 128,
                 NULL, 1, NULL);
 
-    xTaskCreate(updateDisplay, "updisp", 128,
+    xTaskCreate(updateDisplayTask, "updisp", 128,
                 NULL, 1, &updateDisplayTaskHandle);
 
-    displayScreenOffTimer = xTimerCreate("tdsoff", pdMS_TO_TICKS(7000),
-                                         pdFALSE, NULL, displayScreenOff);
-                                         
-    xTimerStart(displayScreenOffTimer, 100);
+    disableDisplayTimerHandle = xTimerCreate("uidis", pdMS_TO_TICKS(7000),
+                                        pdFALSE, NULL, disableDisplay);
+
+    xTimerStart(disableDisplayTimerHandle, 100);
 }
 
 void loop()
@@ -67,36 +64,36 @@ void loop()
     
 }
 
-static void checkButtons(void* unused)
+static void checkButtonsTask(void* unused)
 {
+    static Button leftButton(10, true);   // кнопка, пробуждающая дисплей
+    static Button middleButton(11, true); // кнопка, переключающая реле
+    static Button rightButton(9, true);   // кнопка, начинающая сеанс настройки
 
     for (;;)
     {
-        bool lpress = leftButton.hasBeenPressed();
-        bool mpress = middleButton.hasBeenPressed();
-        bool rpress = rightButton.hasBeenPressed();
+        bool leftPress = leftButton.hasBeenPressed();
+        bool middlePress = middleButton.hasBeenPressed();
+        bool rightPress = rightButton.hasBeenPressed();
 
-        if (lpress || mpress || rpress) {
-            lcd.backlight();
-            lcd.display();
-            vTaskResume(updateDisplayTaskHandle);
-            xTimerReset(displayScreenOffTimer, 100);
+        if (leftPress || middlePress || rightPress) {
+            enableDisplay();
         }
 
-        if (lpress) {
+        if (leftPress) {
         }
 
-        if (mpress) {
+        if (middlePress) {
         }
 
-        if (rpress) {
+        if (rightPress) {
         }
 
         vTaskDelay(pdMS_TO_TICKS(50));
     }
 }
 
-static void performLightingSessions(void* unused)
+static void performLightingTask(void* unused)
 {
     DateTime currentTime;
     uint16_t lightLevel;
@@ -124,7 +121,7 @@ static void performLightingSessions(void* unused)
     }
 }
 
-static void updateDisplay(void* unused)
+static void updateDisplayTask(void* unused)
 {
 
     for (;;) {
@@ -133,7 +130,15 @@ static void updateDisplay(void* unused)
     }
 }
 
-static void displayScreenOff(TimerHandle_t unused)
+static void enableDisplay()
+{
+    lcd.backlight();
+    lcd.display();
+    vTaskResume(updateDisplayTaskHandle);
+    xTimerReset(disableDisplayTimerHandle, 100);
+}
+
+static void disableDisplay(TimerHandle_t unused)
 {
     lcd.noBacklight();
     lcd.noDisplay();
