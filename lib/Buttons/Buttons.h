@@ -19,7 +19,7 @@ public:
      * pin: нормер контакта кнопки в представлении Arduino;
      * inverted: логический уровень на пине в ненажатом состоянии. 
      */
-    Button(uint8_t pin, bool inverted);
+    explicit Button(uint8_t pin, bool inverted);
 
     /** Возвращает true, если кнопка зажата в данный момент, иначе false. */
     bool isPressed();

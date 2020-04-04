@@ -13,7 +13,7 @@ private:
     const bool inverted;
 
 public:
-    Buzzer(uint8_t pin, bool inverted);
+    explicit Buzzer(uint8_t pin, bool inverted);
 
     void startBuzzing() {
         digitalWrite(pin, !inverted);

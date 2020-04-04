@@ -13,7 +13,7 @@ private:
     const bool inverted;
 
 public:
-    Relay(uint8_t pin, bool inverted);
+    explicit Relay(uint8_t pin, bool inverted);
 
     void setState(bool state)
     {

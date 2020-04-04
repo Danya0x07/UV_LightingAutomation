@@ -14,7 +14,7 @@ private:
     RTC_DS1307 rtc;
 
 public:
-    Clock(uint8_t powerPin, uint8_t groundPin);
+    explicit Clock(uint8_t powerPin, uint8_t groundPin);
     DateTime getTime();
     void setTime(const DateTime&);
 };

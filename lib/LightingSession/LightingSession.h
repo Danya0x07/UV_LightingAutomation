@@ -18,7 +18,8 @@ private:
     DateTime endTime;
 
 public:
-    LightingSession();
+    explicit LightingSession();
+    
     void loadFromEeprom(uint16_t address);
     void saveToEeprom(uint16_t address);
     bool hasToBeUnderway(const DateTime& currentTime, uint8_t lightLevel);

@@ -80,7 +80,6 @@ static void testLightingSession()
 
 void processTests()
 {
-    delay(2000);
     UNITY_BEGIN();
     RUN_TEST(testRelay);
     RUN_TEST(testButtons);
