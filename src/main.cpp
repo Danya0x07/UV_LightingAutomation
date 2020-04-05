@@ -11,6 +11,7 @@
 #include <LightSensor.h>
 #include <Clock.h>
 #include <LightingSession.h>
+#include <UI.h>
 
 #include "macro.h"
 
@@ -31,13 +32,13 @@ static void enableDisplay();
 static void disableDisplay(TimerHandle_t unused);
 
 void setup()
-{    
-    
+{
+
     pinMode(CONN_LED_pin, OUTPUT);
     digitalWrite(CONN_LED_pin, 0);
     pinMode(13, OUTPUT);  // минус для зелёного светика
     digitalWrite(13, 0);
-    
+
     lcd.setBacklightPin(12, POSITIVE);
     lcd.begin(16, 2);
 
@@ -61,7 +62,7 @@ void setup()
 
 void loop()
 {
-    
+
 }
 
 static void checkButtonsTask(void* unused)

@@ -3,10 +3,10 @@
 #include <Arduino.h>
 #include <LiquidCrystal.h>
 
-#include <LightingSession.h>
+#include <Clock.h>
 #include <Relay.h>
 #include <Buzzer.h>
-#include <Clock.h>
+#include <LightingSession.h>
 
 class UserInterface;
 
@@ -22,11 +22,11 @@ protected:
 public:
     explicit Menu(UserInterface& ui) : ui(ui) {}
 
+    virtual void initalize(LiquidCrystal*) = 0;
     virtual void leftPressHandler(Buzzer&) = 0;
     virtual void middlePressHandler(Buzzer&) = 0;
     virtual void rightPressHandler(Buzzer&) = 0;
     virtual void updateDisplay(LiquidCrystal*, uint8_t lightLevel) = 0;
-    virtual void initalize(LiquidCrystal*) = 0;
 };
 
 /**
@@ -38,17 +38,17 @@ class MainMenu : public Menu
 public:
     explicit MainMenu(UserInterface&);
 
+    void initalize(LiquidCrystal*) override;
     void leftPressHandler(Buzzer&) override;
     void middlePressHandler(Buzzer&) override;
     void rightPressHandler(Buzzer&) override;
     void updateDisplay(LiquidCrystal*, uint8_t lightLevel) override;
-    void initalize(LiquidCrystal*) override;
 };
 
 /**
  * Меню выбора настроек (что собираемся настраивать).
  */
-class SettingsSelectMenu : public Menu
+class SettingSelectMenu : public Menu
 {
 private:
     enum : int8_t {
@@ -58,13 +58,13 @@ private:
     } currentItem = ITEM_SESSIONS;
 
 public:
-    explicit SettingsSelectMenu(UserInterface&);
+    explicit SettingSelectMenu(UserInterface&);
 
+    void initalize(LiquidCrystal*) override;
     void leftPressHandler(Buzzer&) override;
     void middlePressHandler(Buzzer&) override;
     void rightPressHandler(Buzzer&) override;
     void updateDisplay(LiquidCrystal*, uint8_t lightLevel) override;
-    void initalize(LiquidCrystal*) override;
 };
 
 /**
@@ -80,15 +80,15 @@ private:
 public:
     explicit ClockSetupMenu(UserInterface&);
 
+    void initalize(LiquidCrystal*) override;
     void leftPressHandler(Buzzer&) override;
     void middlePressHandler(Buzzer&) override;
     void rightPressHandler(Buzzer&) override;
     void updateDisplay(LiquidCrystal*, uint8_t lightLevel) override;
-    void initalize(LiquidCrystal*) override;
 };
 
 /**
- * Меню выбора сеанса досветки для последующей настройки. 
+ * Меню выбора сеанса досветки для последующей настройки.
  */
 class SessionSelectMenu : public Menu
 {
@@ -102,11 +102,11 @@ private:
 public:
     explicit SessionSelectMenu(UserInterface&);
 
+    void initalize(LiquidCrystal*) override;
     void leftPressHandler(Buzzer&) override;
     void middlePressHandler(Buzzer&) override;
     void rightPressHandler(Buzzer&) override;
     void updateDisplay(LiquidCrystal*, uint8_t lightLevel) override;
-    void initalize(LiquidCrystal*) override;
 };
 
 /**
@@ -116,19 +116,19 @@ class SessionSetupMenu : public Menu
 {
 private:
     static const uint8_t NUM_OF_TEMP_SETTINGS = 6;
-    LightingSession& morningSession;
-    LightingSession& eveningSession;
     uint8_t tempSettings[NUM_OF_TEMP_SETTINGS];
     uint8_t currentPos = 0;
+    LightingSession& morningSession;
+    LightingSession& eveningSession;
 
 public:
-    explicit SessionSetupMenu(UserInterface&);
+    explicit SessionSetupMenu(UserInterface&, LightingSession&, LightingSession&);
 
+    void initalize(LiquidCrystal*) override;
     void leftPressHandler(Buzzer&) override;
     void middlePressHandler(Buzzer&) override;
     void rightPressHandler(Buzzer&) override;
     void updateDisplay(LiquidCrystal*, uint8_t lightLevel) override;
-    void initalize(LiquidCrystal*) override;
 };
 
 /**
@@ -140,8 +140,9 @@ class UserInterface
 {
 private:
     MainMenu mainMenu;
-    SettingsSelectMenu settingsSelectMenu;
+    SettingSelectMenu settingsSelectMenu;
     ClockSetupMenu clockSetupMenu;
+    SessionSelectMenu sessionSelectMenu;
     SessionSetupMenu sessionSetupMenu;
     Menu* currentMenu;
 
@@ -151,11 +152,13 @@ private:
     LiquidCrystal* lcd;
 
 public:
-    explicit UserInterface(Clock&, Buzzer&, Relay&, LightingSession&, LightingSession&, LiquidCrystal*);
+    explicit UserInterface(Clock&, Relay&, Buzzer&, LiquidCrystal*,
+                           LightingSession&, LightingSession&);
 
     Menu* getMainMenu() { return &mainMenu; }
     Menu* getSettingsSelectMenu() { return &settingsSelectMenu; }
     Menu* getClockSetupMenu() { return &clockSetupMenu; }
+    Menu* getSessionSelectMenu() { return &sessionSelectMenu; }
     Menu* getSessionSetupMenu() { return &sessionSetupMenu; }
     void setMenu(Menu*);
 
