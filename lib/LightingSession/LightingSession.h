@@ -29,6 +29,11 @@ public:
     void setStartTime(uint8_t hour, uint8_t minute);
     void setEndTime(uint8_t hour, uint8_t minute);
 
+    bool getActive() { return isActive; }
+    uint8_t getLightThreshold() { return lightThreshold; }
+    void getStartTime(uint8_t* hour, uint8_t* minute);
+    void getEndTime(uint8_t* hour, uint8_t* minute);
+
     bool operator==(const LightingSession&);
     bool operator!=(const LightingSession&);
     

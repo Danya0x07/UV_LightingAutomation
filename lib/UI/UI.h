@@ -45,9 +45,7 @@ public:
     void updateDisplay(LiquidCrystal*, uint8_t lightLevel) override;
 };
 
-/**
- * Меню выбора настроек (что собираемся настраивать).
- */
+/** Меню выбора настроек (что собираемся настраивать). */
 class SettingSelectMenu : public Menu
 {
 private:
@@ -67,9 +65,7 @@ public:
     void updateDisplay(LiquidCrystal*, uint8_t lightLevel) override;
 };
 
-/**
- * Меню настройки часов.
- */
+/** Меню настройки часов. */
 class ClockSetupMenu : public Menu
 {
 private:
@@ -87,9 +83,7 @@ public:
     void updateDisplay(LiquidCrystal*, uint8_t lightLevel) override;
 };
 
-/**
- * Меню выбора сеанса досветки для последующей настройки.
- */
+/** Меню выбора сеанса досветки для последующей настройки. */
 class SessionSelectMenu : public Menu
 {
 private:
@@ -109,9 +103,7 @@ public:
     void updateDisplay(LiquidCrystal*, uint8_t lightLevel) override;
 };
 
-/**
- * Меню настройки сеанса досветки.
- */
+/** Меню настройки сеанса досветки. */
 class SessionSetupMenu : public Menu
 {
 private:

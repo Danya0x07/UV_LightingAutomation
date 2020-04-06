@@ -63,6 +63,18 @@ void LightingSession::setEndTime(uint8_t hour, uint8_t minute)
     endTime = DateTime(0, 0, 0, hour, minute, 0);
 }
 
+void LightingSession::getStartTime(uint8_t* hour, uint8_t* minute)
+{
+    *hour = startTime.hour();
+    *minute = startTime.minute();
+}
+
+void LightingSession::getEndTime(uint8_t* hour, uint8_t* minute)
+{
+    *hour = endTime.hour();
+    *minute = endTime.minute();
+}
+
 bool LightingSession::operator==(const LightingSession& other)
 {
     return this->isActive == other.isActive && 

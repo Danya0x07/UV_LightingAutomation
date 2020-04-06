@@ -8,19 +8,22 @@
 #include <Buttons.h>
 #include <Relay.h>
 #include <Buzzer.h>
-#include <LightSensor.h>
 #include <Clock.h>
+#include <LightSensor.h>
 #include <LightingSession.h>
 #include <UI.h>
 
 #include "macro.h"
 
-static Relay relay(A1, true);
-static Buzzer buzzer(8, false);
-static LightSensor lightSensor(A6);
-static LiquidCrystal lcd(2, 3, 4, 5, 6, 7);
-static Clock rtclock(A3, A2);
-static LightingSession morningSession, eveningSession;
+Button leftButton(10, true);   // кнопка, пробуждающая дисплей
+Button middleButton(11, true); // кнопка, переключающая реле
+Button rightButton(9, true);   // кнопка, начинающая сеанс настройки
+Relay relay(A1, true);
+Buzzer buzzer(8, false);
+Clock rtclock(A3, A2);
+LightSensor lightSensor(A6);
+LiquidCrystal lcd(2, 3, 4, 5, 6, 7);
+LightingSession morningSession, eveningSession;
 
 static TaskHandle_t updateDisplayTaskHandle;
 static TimerHandle_t disableDisplayTimerHandle;
@@ -67,10 +70,6 @@ void loop()
 
 static void checkButtonsTask(void* unused)
 {
-    static Button leftButton(10, true);   // кнопка, пробуждающая дисплей
-    static Button middleButton(11, true); // кнопка, переключающая реле
-    static Button rightButton(9, true);   // кнопка, начинающая сеанс настройки
-
     for (;;)
     {
         bool leftPress = leftButton.hasBeenPressed();
