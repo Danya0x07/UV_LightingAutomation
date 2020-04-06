@@ -25,14 +25,14 @@ LightSensor lightSensor(A6);
 LiquidCrystal lcd(2, 3, 4, 5, 6, 7);
 LightingSession morningSession, eveningSession;
 
-static TaskHandle_t updateDisplayTaskHandle;
-static TimerHandle_t disableDisplayTimerHandle;
+TaskHandle_t updateDisplayTaskHandle;
+TimerHandle_t disableDisplayTimerHandle;
 
-static void checkButtonsTask(void* unused);
-static void performLightingTask(void* unused);
-static void updateDisplayTask(void* unused);
-static void enableDisplay();
-static void disableDisplay(TimerHandle_t unused);
+void checkButtonsTask(void* unused);
+void performLightingTask(void* unused);
+void updateDisplayTask(void* unused);
+void enableDisplay();
+void disableDisplay(TimerHandle_t unused);
 
 void setup()
 {
@@ -68,7 +68,7 @@ void loop()
 
 }
 
-static void checkButtonsTask(void* unused)
+void checkButtonsTask(void* unused)
 {
     for (;;)
     {
@@ -93,7 +93,7 @@ static void checkButtonsTask(void* unused)
     }
 }
 
-static void performLightingTask(void* unused)
+void performLightingTask(void* unused)
 {
     DateTime currentTime;
     uint16_t lightLevel;
@@ -121,7 +121,7 @@ static void performLightingTask(void* unused)
     }
 }
 
-static void updateDisplayTask(void* unused)
+void updateDisplayTask(void* unused)
 {
 
     for (;;) {
@@ -130,7 +130,7 @@ static void updateDisplayTask(void* unused)
     }
 }
 
-static void enableDisplay()
+void enableDisplay()
 {
     lcd.backlight();
     lcd.display();
@@ -138,7 +138,7 @@ static void enableDisplay()
     xTimerReset(disableDisplayTimerHandle, 100);
 }
 
-static void disableDisplay(TimerHandle_t unused)
+void disableDisplay(TimerHandle_t unused)
 {
     lcd.noBacklight();
     lcd.noDisplay();

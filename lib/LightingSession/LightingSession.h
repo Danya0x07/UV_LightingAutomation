@@ -31,6 +31,8 @@ public:
 
     bool getActive() { return isActive; }
     uint8_t getLightThreshold() { return lightThreshold; }
+    DateTime getStartTime() { return startTime; }
+    DateTime getEndTime() { return endTime; }
     void getStartTime(uint8_t* hour, uint8_t* minute);
     void getEndTime(uint8_t* hour, uint8_t* minute);
 

@@ -141,7 +141,7 @@ private:
     Clock& clock;
     Relay& relay;
     Buzzer& buzzer;
-    LiquidCrystal* lcd;
+    LiquidCrystal* const lcd;
 
 public:
     explicit UserInterface(Clock&, Relay&, Buzzer&, LiquidCrystal*,
