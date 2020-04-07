@@ -65,7 +65,7 @@ void setup()
 
 void loop()
 {
-
+    // TODO: Добавить вход в режим сна.
 }
 
 void checkButtonsTask(void* unused)

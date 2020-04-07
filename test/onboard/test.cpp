@@ -32,8 +32,8 @@ void testButtons()
     Button rightButton(9, true);
 
     /*
-     * В состоянии покоя кнопки не должны быть нажаты, 
-     * если это не так, значит внутренние подтягивающие 
+     * В состоянии покоя кнопки не должны быть нажаты,
+     * если это не так, значит внутренние подтягивающие
      * резисторы вышли из строя.
      */
     TEST_ASSERT_FALSE(leftButton.isPressed());
@@ -73,13 +73,15 @@ void testLightingSession()
     /* Проверяем временные рамки. */
     TEST_ASSERT_FALSE(lightingSession.hasToBeUnderway(DateTime(0, 0, 0, 6, 29, 0), 20));
     TEST_ASSERT_FALSE(lightingSession.hasToBeUnderway(DateTime(0, 0, 0, 9, 1, 0), 20));
-    
+
     /*
      * Проверяем корректность сохранения данных о сеансе в EEPROM.
      * для этого сохраняем сеанс по определённому адресу, а потом
      * ещё раз, впритык к уже сохранённым данным. Далее сравниваем
      * загруженный по первоначальному адресу сеанс: если они не равны,
      * значит второе сохранение повредило данные первого.
+     * Поскольку во время сохранения данных вызывается EEPROM.update(),
+     * а не EEPROM.write(), ресурс ячеек не расходуется.
      */
     uint16_t address = 100;
     lightingSession.saveToEeprom(address);
@@ -94,8 +96,8 @@ void testMainMenuUI()
     relay.setState(0);
     ui.resetMenu();
 
-    /* 
-     * Тестируем поведение главного меню. 
+    /*
+     * Тестируем поведение главного меню.
      * Тут левая кнопка ничего не делает (нужна просто для пробуждения экрана)
      * Средняя кнопка переключает состояние реле.
      * Правая кнопка осуществляет переход в меню выбора настроек.
@@ -109,6 +111,8 @@ void testMainMenuUI()
 
 void testSessionConfiguringUI()
 {
+    ui.resetMenu();
+
     morningSession.setActive(true);
     morningSession.setLightThreshold(28);
     morningSession.setStartTime(6, 0);
@@ -125,7 +129,7 @@ void testSessionConfiguringUI()
      * равными настройкам утреннего.
      */
     ui.onRightPress();  // входим в меню выбора настроек
-    ui.onRightPress();  // входим в меню выбора сеансов настройки
+    ui.onRightPress();  // входим в меню выбора сеансов досветки
     ui.onMiddlePress();  // выбираем вечерний сеанс
     ui.onRightPress();  // входим в меню настройки сеанса
 
@@ -167,6 +171,62 @@ void testSessionConfiguringUI()
     TEST_ASSERT_TRUE(eveningSession == morningSession);
 }
 
+void testClockConfiguringUI()
+{
+#ifdef DEVBOARD
+    /* На отладочной плате нет подключённых RTC. */
+    TEST_IGNORE_MESSAGE("There is no RTC connected to devboard.");
+#endif
+
+    DateTime backup = rtclock.getTime();
+    DateTime target(20, 5, 6, 10, 58, 0);
+    DateTime source(18, 4, 7, 12, 1, 0);
+    rtclock.setTime(source);
+    ui.resetMenu();
+
+    /*
+     * Тестируем возможность настройки даты и времени.
+     * Симулируя нажатия на кнопки, установим время RTC,
+     * равное target.
+     */
+    ui.onRightPress();  // входим в меню выбора настроек
+    ui.onMiddlePress();  // выбираем пункт CLOCK
+    ui.onRightPress();  // входим в меню настройки часов
+
+    /* Настраиваем час. */
+    for (uint8_t i = 0; i < 22; i++)
+        ui.onLeftPress();  // уменьшаем час с 12 до 5, используя переполнение 23 --> 0
+    ui.onRightPress();  // подтверждаем и переходим к следующему параметру
+    TEST_ASSERT_EQUAL(rtclock.getTime().hour(), target.hour());
+
+    /* Настраиваем минуту. */
+    for (uint8_t i = 0; i < 3; i++)
+        ui.onMiddlePress();  // увеличиваем минуту с 1 до 58, используя переполнение 0 --> 59
+    ui.onRightPress();  // подтверждаем и переходим к следующему параметру
+    TEST_ASSERT_EQUAL(rtclock.getTime().minute(), target.minute());
+
+    /* Настраиваем число. */
+    ui.onMiddlePress();  // уменьшаем число с 7 до 6
+    ui.onRightPress();  // подтверждаем и переходим к следующему параметру
+    TEST_ASSERT_EQUAL(rtclock.getTime().day(), target.day());
+
+    /* Настраиваем месяц. */
+    ui.onLeftPress();  // 4 + 1 == 5
+    ui.onRightPress();  // подтверждаем и переходим к следующему параметру
+    TEST_ASSERT_EQUAL(rtclock.getTime().month(), target.month());
+
+    /* Настраиваем год. */
+    ui.onLeftPress();  // 18 + 1 == 19
+    ui.onLeftPress();  // 19 + 1 == 20
+    ui.onRightPress();  // подтверждаем и выходим в главное меню
+    TEST_ASSERT_EQUAL(rtclock.getTime().year(), target.year());
+
+    /* В итоге время часов должно стать равным target. */
+    TEST_ASSERT_TRUE(rtclock.getTime() == target);
+
+    rtclock.setTime(backup);
+}
+
 void processTests()
 {
     UNITY_BEGIN();
@@ -176,6 +236,7 @@ void processTests()
     RUN_TEST(testLightingSession);
     RUN_TEST(testMainMenuUI);
     RUN_TEST(testSessionConfiguringUI);
+    RUN_TEST(testClockConfiguringUI);
     UNITY_END();
 }
 
