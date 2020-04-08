@@ -15,10 +15,7 @@ private:
 public:
     explicit Relay(uint8_t pin, bool inverted);
 
-    void setState(bool state)
-    {
-        digitalWrite(pin, state != inverted);
-    }
+    void setState(bool state);
 
     bool getState()
     {
