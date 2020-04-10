@@ -35,6 +35,7 @@ void ClockSetupMenu::initalize(LiquidCrystal* lcd)
 
 void ClockSetupMenu::leftPressHandler(Buzzer& buzzer)
 {
+    buzzer.buzz(1, 150);
     int8_t tempSetting = tempSettings[currentPos];
     if (++tempSetting > settingsMaxBounds[currentPos]) {
         tempSetting = settingsMinBounds[currentPos];
@@ -46,6 +47,7 @@ void ClockSetupMenu::leftPressHandler(Buzzer& buzzer)
 
 void ClockSetupMenu::middlePressHandler(Buzzer& buzzer)
 {
+    buzzer.buzz(1, 150);
     int8_t tempSetting = tempSettings[currentPos];
     if (--tempSetting < settingsMinBounds[currentPos]) {
         tempSetting = settingsMaxBounds[currentPos];
@@ -55,10 +57,10 @@ void ClockSetupMenu::middlePressHandler(Buzzer& buzzer)
 
 void ClockSetupMenu::rightPressHandler(Buzzer& buzzer)
 {
+    buzzer.buzz(2, 150);
     settings = DateTime(tempSettings[4], tempSettings[3], tempSettings[2],
                         tempSettings[0], tempSettings[1], 0);
     ui.getClock().setTime(settings);
-
     if (++currentPos >= NUM_OF_SETTINGS) {
         ui.setMenu(ui.getMainMenu());
         currentPos = 0;  // на всякий случай

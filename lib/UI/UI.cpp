@@ -11,7 +11,7 @@ UserInterface::UserInterface(Clock& clock, Relay& relay, Buzzer& buzzer,
     sessionSetupMenu(*this, morningSession, eveningSession),
     clock(clock), relay(relay), buzzer(buzzer), lcd(lcd)
 {
-
+    resetMenu();
 }
 
 void UserInterface::setMenu(Menu* menu)

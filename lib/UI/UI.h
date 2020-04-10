@@ -96,10 +96,11 @@ private:
         ITEM_MORNING,
         ITEM_EVENING,
         NUM_OF_ITEMS
-    } currentItem = ITEM_MORNING;
+    };
+    int8_t currentItem = ITEM_MORNING;
 
 public:
-    explicit SessionSelectMenu(UserInterface&);
+    explicit SessionSelectMenu(UserInterface&) : Menu(ui) {}
 
     void initalize(LiquidCrystal*) override;
     void leftPressHandler(Buzzer&) override;
