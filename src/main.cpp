@@ -24,6 +24,7 @@ Clock rtclock(A3, A2);
 LightSensor lightSensor(A6);
 LiquidCrystal lcd(2, 3, 4, 5, 6, 7);
 LightingSession morningSession, eveningSession;
+UserInterface ui(rtclock, relay, buzzer, &lcd, morningSession, eveningSession);
 
 TaskHandle_t updateDisplayTaskHandle;
 TimerHandle_t disableDisplayTimerHandle;
@@ -36,12 +37,6 @@ void disableDisplay(TimerHandle_t unused);
 
 void setup()
 {
-
-    pinMode(CONN_LED_pin, OUTPUT);
-    digitalWrite(CONN_LED_pin, 0);
-    pinMode(13, OUTPUT);  // минус для зелёного светика
-    digitalWrite(13, 0);
-
     lcd.setBacklightPin(12, POSITIVE);
     lcd.begin(16, 2);
 
@@ -58,7 +53,7 @@ void setup()
                 NULL, 1, &updateDisplayTaskHandle);
 
     disableDisplayTimerHandle = xTimerCreate("uidis", pdMS_TO_TICKS(7000),
-                                        pdFALSE, NULL, disableDisplay);
+                                             pdFALSE, NULL, disableDisplay);
 
     xTimerStart(disableDisplayTimerHandle, 100);
 }
@@ -81,12 +76,15 @@ void checkButtonsTask(void* unused)
         }
 
         if (leftPress) {
+            ui.onLeftPress();
         }
 
         if (middlePress) {
+            ui.onMiddlePress();
         }
 
         if (rightPress) {
+            ui.onRightPress();
         }
 
         vTaskDelay(pdMS_TO_TICKS(50));
@@ -110,8 +108,7 @@ void performLightingTask(void* unused)
                 relay.setState(1);
                 relayHasBeenEnabled = true;
             }
-        }
-        else {
+        } else {
             if (relayHasBeenEnabled == true) {
                 relay.setState(0);
                 relayHasBeenEnabled = false;
@@ -125,7 +122,7 @@ void updateDisplayTask(void* unused)
 {
 
     for (;;) {
-
+        ui.updateDisplay(lightSensor.getValue());
         vTaskDelay(pdMS_TO_TICKS(500));
     }
 }
@@ -142,5 +139,6 @@ void disableDisplay(TimerHandle_t unused)
 {
     lcd.noBacklight();
     lcd.noDisplay();
+    ui.resetMenu();
     vTaskSuspend(updateDisplayTaskHandle);
 }

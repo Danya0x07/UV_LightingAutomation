@@ -30,6 +30,7 @@ void SessionSetupMenu::rightPressHandler(Buzzer& buzzer)
 
 void SessionSetupMenu::updateDisplay(LiquidCrystal* lcd, uint8_t lightLevel)
 {
-
+    if (lcd == nullptr)
+        return;
 }
 

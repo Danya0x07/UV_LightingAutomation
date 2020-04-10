@@ -27,5 +27,6 @@ void ClockSetupMenu::rightPressHandler(Buzzer& buzzer)
 
 void ClockSetupMenu::updateDisplay(LiquidCrystal* lcd, uint8_t lightLevel)
 {
-
+    if (lcd == nullptr)
+        return;
 }

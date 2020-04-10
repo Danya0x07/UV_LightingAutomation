@@ -36,7 +36,7 @@ public:
 class MainMenu : public Menu
 {
 public:
-    explicit MainMenu(UserInterface&);
+    explicit MainMenu(UserInterface&) : Menu(ui) {}
 
     void initalize(LiquidCrystal*) override;
     void leftPressHandler(Buzzer&) override;

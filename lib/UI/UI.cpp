@@ -16,30 +16,31 @@ UserInterface::UserInterface(Clock& clock, Relay& relay, Buzzer& buzzer,
 
 void UserInterface::setMenu(Menu* menu)
 {
-
+    menu->initalize(lcd);
+    currentMenu = menu;
 }
 
 void UserInterface::onLeftPress()
 {
-
+    currentMenu->leftPressHandler(buzzer);
 }
 
 void UserInterface::onMiddlePress()
 {
-
+    currentMenu->middlePressHandler(buzzer);
 }
 
 void UserInterface::onRightPress()
 {
-
+    currentMenu->rightPressHandler(buzzer);
 }
 
 void UserInterface::updateDisplay(uint8_t lightLevel)
 {
-
+    currentMenu->updateDisplay(lcd, lightLevel);
 }
 
 void UserInterface::resetMenu()
 {
-
+    setMenu(&mainMenu);
 }

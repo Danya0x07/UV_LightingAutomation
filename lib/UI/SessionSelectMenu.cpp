@@ -27,6 +27,7 @@ void SessionSelectMenu::rightPressHandler(Buzzer& buzzer)
 
 void SessionSelectMenu::updateDisplay(LiquidCrystal* lcd, uint8_t lightLevel)
 {
-
+    if (lcd == nullptr)
+        return;
 }
 
