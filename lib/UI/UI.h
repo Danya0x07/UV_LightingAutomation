@@ -53,10 +53,11 @@ private:
         ITEM_SESSIONS,
         ITEM_CLOCK,
         NUM_OF_ITEMS
-    } currentItem = ITEM_SESSIONS;
+    };
+    int8_t currentItem = ITEM_SESSIONS;
 
 public:
-    explicit SettingSelectMenu(UserInterface&);
+    explicit SettingSelectMenu(UserInterface&) : Menu(ui) {}
 
     void initalize(LiquidCrystal*) override;
     void leftPressHandler(Buzzer&) override;
