@@ -13,8 +13,6 @@
 #include <LightingSession.h>
 #include <UI.h>
 
-#include "macro.h"
-
 Button leftButton(10, true);   // кнопка, пробуждающая дисплей
 Button middleButton(11, true); // кнопка, переключающая реле
 Button rightButton(9, true);   // кнопка, начинающая сеанс настройки
@@ -96,7 +94,8 @@ void performLightingTask(void* unused)
     DateTime currentTime;
     uint16_t lightLevel;
     bool relayMustBeEnabled;
-    bool relayHasBeenEnabled = false; // Чтобы автоматическое переключение реле не конфликтовала с ручным.
+    // Чтобы автоматическое переключение реле не конфликтовала с ручным.
+    bool relayHasBeenEnabled = false;
 
     for (;;) {
         currentTime = rtclock.getTime();
