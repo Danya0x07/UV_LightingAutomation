@@ -2,9 +2,9 @@
 
 void SessionSelectMenu::initalize(LiquidCrystal* lcd)
 {
-    currentItem = ITEM_MORNING;
+    currentItem = 0;
 
-    if (lcd) {
+    if (lcd != nullptr) {
         lcd->clear();
         lcd->setCursor(0, 0);
         lcd->print(F("MORNING"));
@@ -17,16 +17,14 @@ void SessionSelectMenu::initalize(LiquidCrystal* lcd)
 void SessionSelectMenu::leftPressHandler(Buzzer& buzzer)
 {
     buzzer.buzz(1, 150);
-    currentItem++;
-    if (currentItem >= NUM_OF_ITEMS)
+    if (++currentItem >= NUM_OF_ITEMS)
         currentItem = NUM_OF_ITEMS - 1;
 }
 
 void SessionSelectMenu::middlePressHandler(Buzzer& buzzer)
 {
     buzzer.buzz(1, 150);
-    currentItem--;
-    if (currentItem < 0)
+    if (--currentItem < 0)
         currentItem = 0;
 }
 

@@ -50,7 +50,7 @@ class SettingSelectMenu : public Menu
 {
 private:
     enum : int8_t {
-        ITEM_SESSIONS,
+        ITEM_SESSIONS = 0,
         ITEM_CLOCK,
         NUM_OF_ITEMS
     };
@@ -70,13 +70,15 @@ public:
 class ClockSetupMenu : public Menu
 {
 private:
-    static const uint8_t NUM_OF_SETTINGS = 5;
-    static const int8_t settingsMinBounds[NUM_OF_SETTINGS];
-    static const int8_t settingsMaxBounds[NUM_OF_SETTINGS];
+    enum : uint8_t {HOUR, MINUTE, YEAR, MONTH, DAY, NUM_OF_SETTINGS};
+    static const int8_t minSettingsBounds[NUM_OF_SETTINGS];
+    static const int8_t maxSettingsBounds[NUM_OF_SETTINGS];
     static const uint8_t settingsLcdColumns[NUM_OF_SETTINGS];
     DateTime settings;
     int8_t tempSettings[NUM_OF_SETTINGS];
     uint8_t currentPos = 0;
+
+    static void validateDate(int8_t* day, int8_t month, int16_t year);
 
 public:
     explicit ClockSetupMenu(UserInterface&);
@@ -93,7 +95,7 @@ class SessionSelectMenu : public Menu
 {
 private:
     enum : int8_t {
-        ITEM_MORNING,
+        ITEM_MORNING = 0,
         ITEM_EVENING,
         NUM_OF_ITEMS
     };

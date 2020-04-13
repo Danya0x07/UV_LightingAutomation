@@ -2,8 +2,7 @@
 
 void MainMenu::initalize(LiquidCrystal* lcd)
 {
-    if (lcd) {
-        lcd->clear();
+    if (lcd != nullptr) {
         lcd->setCursor(0, 0);
         lcd->print(F("D:  :     /  /  "));
         lcd->setCursor(0, 1);

@@ -4,7 +4,7 @@ void SettingSelectMenu::initalize(LiquidCrystal* lcd)
 {
     currentItem = 0;
 
-    if (lcd) {
+    if (lcd != nullptr) {
         lcd->clear();
         lcd->setCursor(1, 0);
         lcd->print(F("SESSIONS"));
@@ -17,16 +17,14 @@ void SettingSelectMenu::initalize(LiquidCrystal* lcd)
 void SettingSelectMenu::leftPressHandler(Buzzer& buzzer)
 {
     buzzer.buzz(1, 150);
-    currentItem++;
-    if (currentItem >= NUM_OF_ITEMS)
+    if (++currentItem >= NUM_OF_ITEMS)
         currentItem = NUM_OF_ITEMS - 1;
 }
 
 void SettingSelectMenu::middlePressHandler(Buzzer& buzzer)
 {
     buzzer.buzz(1, 150);
-    currentItem--;
-    if (currentItem < 0)
+    if (--currentItem < 0)
         currentItem = 0;
 }
 
