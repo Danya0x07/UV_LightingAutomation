@@ -6,7 +6,7 @@ void SessionSelectMenu::initalize(LiquidCrystal* lcd)
 
     if (lcd != nullptr) {
         lcd->clear();
-        lcd->setCursor(0, 0);
+        lcd->setCursor(1, 0);
         lcd->print(F("MORNING"));
         lcd->setCursor(1, 1);
         lcd->print(F("EVENING"));

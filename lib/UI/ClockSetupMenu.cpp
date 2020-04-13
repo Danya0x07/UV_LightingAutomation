@@ -16,11 +16,14 @@ enum Month : int8_t {
 };
 
 const int8_t ClockSetupMenu::minSettingsBounds[NUM_OF_SETTINGS] = {
-        0, 0, 0, 1, 1};
+    0, 0, 0, 1, 1
+};
 const int8_t ClockSetupMenu::maxSettingsBounds[NUM_OF_SETTINGS] = {
-        23, 59, 99, 12, 31};
+    23, 59, 99, 12, 31
+};
 const uint8_t ClockSetupMenu::settingsLcdColumns[NUM_OF_SETTINGS] = {
-        1, 4, 14, 11, 8};
+    1, 4, 14, 11, 8
+};
 
 ClockSetupMenu::ClockSetupMenu(UserInterface& ui)
     : Menu(ui), settings(), tempSettings{}, currentPos(0)
@@ -55,7 +58,6 @@ void ClockSetupMenu::leftPressHandler(Buzzer& buzzer)
     if (++setting > maxSettingsBounds[currentPos]) {
         setting = minSettingsBounds[currentPos];
     }
-
     tempSettings[currentPos] = setting;
 }
 
@@ -78,7 +80,7 @@ void ClockSetupMenu::rightPressHandler(Buzzer& buzzer)
     ui.getClock().setTime(settings);
     if (++currentPos >= NUM_OF_SETTINGS) {
         ui.setMenu(ui.getMainMenu());
-        currentPos = 0;  // на всякий случай
+        currentPos = 0;   // на всякий случай
     }
 }
 
@@ -110,11 +112,13 @@ void ClockSetupMenu::validateDate(int8_t* day, int8_t month, int16_t year)
     case OCTOBER:
     case DECEMBER:
         maxDay = 31;
+        break;
     case APRIL:
     case JUNE:
     case SEPTEMBER:
     case NOVEMBER:
         maxDay = 30;
+        break;
     case FEBRUARY:
         year += 2000;
         if ((year % 4 == 0) && (!(year % 100 == 0) || (year % 400 == 0)))

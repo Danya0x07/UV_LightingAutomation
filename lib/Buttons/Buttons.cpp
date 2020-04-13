@@ -11,7 +11,7 @@ Button::Button(uint8_t pin, bool inverted) : pin(pin), inverted(inverted)
 
 bool Button::isPressed()
 {
-    return digitalRead(pin) != inverted;
+    return bool(digitalRead(pin)) != inverted;
 }
 
 bool Button::hasBeenPressed()
