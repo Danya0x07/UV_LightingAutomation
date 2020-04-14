@@ -54,10 +54,10 @@ private:
         ITEM_CLOCK,
         NUM_OF_ITEMS
     };
-    int8_t currentItem = ITEM_SESSIONS;
+    int8_t currentItem;
 
 public:
-    explicit SettingSelectMenu(UserInterface&) : Menu(ui) {}
+    explicit SettingSelectMenu(UserInterface&) : Menu(ui), currentItem(0) {}
 
     void initalize(LiquidCrystal*) override;
     void leftPressHandler(Buzzer&) override;
@@ -70,13 +70,13 @@ public:
 class ClockSetupMenu : public Menu
 {
 private:
-    enum : uint8_t {HOUR, MINUTE, YEAR, MONTH, DAY, NUM_OF_SETTINGS};
+    enum Settings : uint8_t {HOUR, MINUTE, YEAR, MONTH, DAY, NUM_OF_SETTINGS};
     static const int8_t minSettingsBounds[NUM_OF_SETTINGS];
     static const int8_t maxSettingsBounds[NUM_OF_SETTINGS];
     static const uint8_t settingsLcdColumns[NUM_OF_SETTINGS];
     DateTime settings;
     int8_t tempSettings[NUM_OF_SETTINGS];
-    uint8_t currentPos = 0;
+    uint8_t currentPos;
 
     static void validateDate(int8_t* day, int8_t month, int16_t year);
 
@@ -99,10 +99,10 @@ private:
         ITEM_EVENING,
         NUM_OF_ITEMS
     };
-    int8_t currentItem = ITEM_MORNING;
+    int8_t currentItem;
 
 public:
-    explicit SessionSelectMenu(UserInterface&) : Menu(ui) {}
+    explicit SessionSelectMenu(UserInterface&) : Menu(ui), currentItem(0) {}
 
     void initalize(LiquidCrystal*) override;
     void leftPressHandler(Buzzer&) override;
@@ -115,14 +115,20 @@ public:
 class SessionSetupMenu : public Menu
 {
 private:
-    static const uint8_t NUM_OF_SETTINGS = 6;
+    enum Settings : int8_t {
+        ACTIVITY, THRESHOLD,
+        STARTHOUR, STARTMINUTE,
+        ENDHOUR, ENDMINUTE,
+        NUM_OF_SETTINGS
+    };
+    static const int8_t maxSettingsBounds[NUM_OF_SETTINGS];
+    static const uint8_t settingsLcdRows[NUM_OF_SETTINGS];
+    static const uint8_t settingsLcdColumns[NUM_OF_SETTINGS];
     uint8_t tempSettings[NUM_OF_SETTINGS];
-    uint8_t currentPos = 0;
-    LightingSession& morningSession;
-    LightingSession& eveningSession;
+    uint8_t currentPos;
 
 public:
-    explicit SessionSetupMenu(UserInterface&, LightingSession&, LightingSession&);
+    explicit SessionSetupMenu(UserInterface&);
 
     void initalize(LiquidCrystal*) override;
     void leftPressHandler(Buzzer&) override;
@@ -140,7 +146,7 @@ class UserInterface
 {
 private:
     MainMenu mainMenu;
-    SettingSelectMenu settingsSelectMenu;
+    SettingSelectMenu settingSelectMenu;
     ClockSetupMenu clockSetupMenu;
     SessionSelectMenu sessionSelectMenu;
     SessionSetupMenu sessionSetupMenu;
@@ -151,12 +157,16 @@ private:
     Buzzer& buzzer;
     LiquidCrystal* const lcd;
 
+    LightingSession* const morningSession;
+    LightingSession* const eveningSession;
+    LightingSession* selectedSession;
+
 public:
     explicit UserInterface(Clock&, Relay&, Buzzer&, LiquidCrystal*,
-                           LightingSession&, LightingSession&);
+                           LightingSession*, LightingSession*);
 
     Menu* getMainMenu() { return &mainMenu; }
-    Menu* getSettingsSelectMenu() { return &settingsSelectMenu; }
+    Menu* getSettingSelectMenu() { return &settingSelectMenu; }
     Menu* getClockSetupMenu() { return &clockSetupMenu; }
     Menu* getSessionSelectMenu() { return &sessionSelectMenu; }
     Menu* getSessionSetupMenu() { return &sessionSetupMenu; }
@@ -164,6 +174,11 @@ public:
 
     Clock& getClock() { return clock; }
     Relay& getRelay() { return relay; }
+
+    LightingSession* getMorningSession() { return morningSession; }
+    LightingSession* getEveningSession() { return eveningSession; }
+    LightingSession* getSelectedSession() { return selectedSession; }
+    void setSelectedSession(LightingSession*);
 
     void onLeftPress();
     void onMiddlePress();

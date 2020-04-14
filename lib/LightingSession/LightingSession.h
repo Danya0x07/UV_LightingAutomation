@@ -12,6 +12,10 @@
 class LightingSession
 {
 private:
+    static uint8_t nextId;
+    uint8_t id;
+
+    /* Часть, которая сохраняется в EEPROM. */
     bool isActive;
     uint8_t lightThreshold;
     DateTime startTime;
@@ -21,7 +25,9 @@ public:
     explicit LightingSession();
     
     void loadFromEeprom(uint16_t address);
+    void loadFromEeprom();
     void saveToEeprom(uint16_t address);
+    void saveToEeprom();
     bool hasToBeUnderway(const DateTime& currentTime, uint8_t lightLevel);
     
     void setActive(bool active) {isActive = active;}

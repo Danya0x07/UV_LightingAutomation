@@ -22,7 +22,7 @@ Clock rtclock(A3, A2);
 LightSensor lightSensor(A6);
 LiquidCrystal lcd(2, 3, 4, 5, 6, 7);
 LightingSession morningSession, eveningSession;
-UserInterface ui(rtclock, relay, buzzer, &lcd, morningSession, eveningSession);
+UserInterface ui(rtclock, relay, buzzer, &lcd, &morningSession, &eveningSession);
 
 TaskHandle_t updateDisplayTaskHandle;
 TimerHandle_t disableDisplayTimerHandle;

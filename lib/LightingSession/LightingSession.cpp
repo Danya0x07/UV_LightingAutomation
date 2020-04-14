@@ -1,10 +1,13 @@
 #include "LightingSession.h"
 #include <EEPROM.h>
 
+uint8_t LightingSession::nextId = 0;
+
 LightingSession::LightingSession() : startTime(0), endTime(0)
 {
     lightThreshold = 40;  // default stubby value
     isActive = false;
+    id = nextId++;
 }
 
 void LightingSession::loadFromEeprom(uint16_t address)
@@ -27,6 +30,11 @@ void LightingSession::loadFromEeprom(uint16_t address)
     endTime = DateTime(0, 0, 0, eh, em, 0);
 }
 
+void LightingSession::loadFromEeprom()
+{
+    loadFromEeprom(id * getActualEepromPayloadSize());
+}
+
 void LightingSession::saveToEeprom(uint16_t address)
 {
     EEPROM.update(address + 0, isActive);
@@ -35,6 +43,11 @@ void LightingSession::saveToEeprom(uint16_t address)
     EEPROM.update(address + 3, startTime.minute());
     EEPROM.update(address + 4, endTime.hour());
     EEPROM.update(address + 5, endTime.minute());
+}
+
+void LightingSession::saveToEeprom()
+{
+    saveToEeprom(id * getActualEepromPayloadSize());
 }
 
 bool LightingSession::hasToBeUnderway(const DateTime& currentTime, uint8_t lightLevel)

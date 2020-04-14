@@ -34,8 +34,10 @@ void SessionSelectMenu::rightPressHandler(Buzzer& buzzer)
     switch (currentItem)
     {
     case ITEM_MORNING:
+        ui.setSelectedSession(ui.getMorningSession());
         break;
     case ITEM_EVENING:
+        ui.setSelectedSession(ui.getEveningSession());
         break;
     }
 }

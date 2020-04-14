@@ -25,7 +25,7 @@ void MainMenu::middlePressHandler(Buzzer& buzzer)
 void MainMenu::rightPressHandler(Buzzer& buzzer)
 {
     buzzer.buzz(1, 150);
-    ui.setMenu(ui.getSettingsSelectMenu());
+    ui.setMenu(ui.getSettingSelectMenu());
 }
 
 void MainMenu::updateDisplay(LiquidCrystal* lcd, uint8_t lightLevel)
