@@ -1,0 +1,45 @@
+{
+    "description": "Real Time Operating System implemented for AVR (Uno, Leonardo, Mega).", 
+    "repository": {
+        "url": "https://github.com/feilipu/Arduino_FreeRTOS_Library", 
+        "type": "git"
+    }, 
+    "platforms": [
+        "atmelavr"
+    ], 
+    "export": {
+        "exclude": [
+            "extras", 
+            "docs", 
+            "tests", 
+            "test", 
+            "*.doxyfile", 
+            "*.pdf"
+        ], 
+        "include": null
+    }, 
+    "authors": [
+        {
+            "maintainer": false, 
+            "name": "Richard Barry", 
+            "url": null, 
+            "email": "info@freertos.org"
+        }, 
+        {
+            "maintainer": true, 
+            "name": "Phillip Stevens", 
+            "url": null, 
+            "email": "phillip.stevens@gmail.com"
+        }
+    ], 
+    "keywords": [
+        "timing"
+    ], 
+    "id": 507, 
+    "name": "FreeRTOS", 
+    "frameworks": [
+        "arduino"
+    ], 
+    "version": "10.3.0-3", 
+    "homepage": null
+}
