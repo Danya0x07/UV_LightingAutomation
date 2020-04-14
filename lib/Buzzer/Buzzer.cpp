@@ -8,6 +8,7 @@ Buzzer::Buzzer(uint8_t pin, bool inverse) : pin(pin), inverted(inverse)
 
 void Buzzer::buzz(uint8_t times, uint8_t ms)
 {
+#ifndef UNIT_TEST
     for (uint8_t i = 0; i < times; i++)
     {
         digitalWrite(pin, 1);
@@ -15,4 +16,5 @@ void Buzzer::buzz(uint8_t times, uint8_t ms)
         digitalWrite(pin, 0);
         delay(ms / 2);
     }
+#endif
 }
