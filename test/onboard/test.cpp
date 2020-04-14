@@ -12,7 +12,7 @@ Relay relay(A1, true);
 Clock rtclock(A3, A2);
 Buzzer buzzer(8, false);
 LightingSession morningSession, eveningSession;
-UserInterface ui(rtclock, relay, buzzer, nullptr, morningSession, eveningSession);
+UserInterface ui(rtclock, relay, buzzer, nullptr, &morningSession, &eveningSession);
 
 void testRelay()
 {
@@ -235,7 +235,7 @@ void processTests()
     RUN_TEST(testClock);
     RUN_TEST(testLightingSession);
     RUN_TEST(testMainMenuUI);
-    //RUN_TEST(testSessionConfiguringUI);
+    RUN_TEST(testSessionConfiguringUI);
     RUN_TEST(testClockConfiguringUI);
     UNITY_END();
 }

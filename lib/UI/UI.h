@@ -36,7 +36,7 @@ public:
 class MainMenu : public Menu
 {
 public:
-    explicit MainMenu(UserInterface&) : Menu(ui) {}
+    explicit MainMenu(UserInterface& ui) : Menu(ui) {}
 
     void initalize(LiquidCrystal*) override;
     void leftPressHandler(Buzzer&) override;
@@ -57,7 +57,7 @@ private:
     int8_t currentItem;
 
 public:
-    explicit SettingSelectMenu(UserInterface&) : Menu(ui), currentItem(0) {}
+    explicit SettingSelectMenu(UserInterface& ui) : Menu(ui), currentItem(0) {}
 
     void initalize(LiquidCrystal*) override;
     void leftPressHandler(Buzzer&) override;
@@ -102,7 +102,7 @@ private:
     int8_t currentItem;
 
 public:
-    explicit SessionSelectMenu(UserInterface&) : Menu(ui), currentItem(0) {}
+    explicit SessionSelectMenu(UserInterface& ui) : Menu(ui), currentItem(0) {}
 
     void initalize(LiquidCrystal*) override;
     void leftPressHandler(Buzzer&) override;
