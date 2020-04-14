@@ -17,15 +17,15 @@ void SettingSelectMenu::initalize(LiquidCrystal* lcd)
 void SettingSelectMenu::leftPressHandler(Buzzer& buzzer)
 {
     buzzer.buzz(1, 150);
-    if (++currentItem >= NUM_OF_ITEMS)
-        currentItem = NUM_OF_ITEMS - 1;
+    if (--currentItem < 0)
+        currentItem = 0;
 }
 
 void SettingSelectMenu::middlePressHandler(Buzzer& buzzer)
 {
     buzzer.buzz(1, 150);
-    if (--currentItem < 0)
-        currentItem = 0;
+    if (++currentItem >= NUM_OF_ITEMS)
+        currentItem = NUM_OF_ITEMS - 1;
 }
 
 void SettingSelectMenu::rightPressHandler(Buzzer& buzzer)

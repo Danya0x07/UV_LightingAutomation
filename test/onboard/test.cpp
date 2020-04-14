@@ -142,30 +142,30 @@ void testSessionConfiguringUI()
     for (uint8_t i = 0; i < 3; i++)
         ui.onMiddlePress();  // уменьшаем значение порога освещённости с 31 до 28
     ui.onRightPress();  // подтверждаем и переходим к следующему параметру
-    TEST_ASSERT_EQUAL(eveningSession.getLightThreshold(), 28);
+    TEST_ASSERT_EQUAL(28, eveningSession.getLightThreshold());
 
     /* Настраиваем час начала. */
     for (uint8_t i = 0; i < 17 - 6; i++)
         ui.onMiddlePress();  // уменьшаем час начала с 17 до 6
     ui.onRightPress();  // подтверждаем и переходим к следующему параметру
-    TEST_ASSERT_EQUAL(eveningSession.getStartTime().hour(), 6);
+    TEST_ASSERT_EQUAL(6, eveningSession.getStartTime().hour());
 
     /* Настраиваем минуту начала. */
     for (uint8_t i = 0; i < 20; i++)
         ui.onLeftPress();  // увеличиваем минуты начала с 40 до 60, должны сброситься в 0
     ui.onRightPress();  // подтверждаем и переходим к следующему параметру
-    TEST_ASSERT_EQUAL(eveningSession.getStartTime().minute(), 0);
+    TEST_ASSERT_EQUAL(0, eveningSession.getStartTime().minute());
 
     /* Настраиваем час окончания. */
     for (uint8_t i = 0; i < 10; i++)
         ui.onLeftPress();  // увеличиваем час окончания с 22 до 8, на 24 должен сброситься в 0
     ui.onRightPress();  // подтверждаем и переходим к следующему параметру
-    TEST_ASSERT_EQUAL(eveningSession.getEndTime().hour(), 8);
+    TEST_ASSERT_EQUAL(8, eveningSession.getEndTime().hour());
 
     /* Настраиваем минуту окончания. */
     ui.onMiddlePress();  // уменьшаем минуту окончания с 21 до 20
     ui.onRightPress();  // подтверждаем и выходим в главное меню
-    TEST_ASSERT_EQUAL(eveningSession.getEndTime().minute(), 20);
+    TEST_ASSERT_EQUAL(20, eveningSession.getEndTime().minute());
 
     /* В итоге вечерний сеанс должен стать равным утреннему. */
     TEST_ASSERT_TRUE(eveningSession == morningSession);

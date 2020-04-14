@@ -17,15 +17,15 @@ void SessionSelectMenu::initalize(LiquidCrystal* lcd)
 void SessionSelectMenu::leftPressHandler(Buzzer& buzzer)
 {
     buzzer.buzz(1, 150);
-    if (++currentItem >= NUM_OF_ITEMS)
-        currentItem = NUM_OF_ITEMS - 1;
+    if (--currentItem < 0)
+        currentItem = 0;
 }
 
 void SessionSelectMenu::middlePressHandler(Buzzer& buzzer)
 {
     buzzer.buzz(1, 150);
-    if (--currentItem < 0)
-        currentItem = 0;
+    if (++currentItem >= NUM_OF_ITEMS)
+        currentItem = NUM_OF_ITEMS - 1;
 }
 
 void SessionSelectMenu::rightPressHandler(Buzzer& buzzer)
@@ -40,6 +40,7 @@ void SessionSelectMenu::rightPressHandler(Buzzer& buzzer)
         ui.setSelectedSession(ui.getEveningSession());
         break;
     }
+    ui.setMenu(ui.getSessionSetupMenu());
 }
 
 void SessionSelectMenu::updateDisplay(LiquidCrystal* lcd, uint8_t lightLevel)
