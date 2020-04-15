@@ -1,7 +1,6 @@
 #include <UI.h>
 
-UserInterface::UserInterface(Clock& clock, Relay& relay, Buzzer& buzzer,
-                             LiquidCrystal* lcd,
+UserInterface::UserInterface(HardwareManager& hwm,
                              LightingSession* morningSession,
                              LightingSession* eveningSession)
     : mainMenu(*this),
@@ -10,7 +9,7 @@ UserInterface::UserInterface(Clock& clock, Relay& relay, Buzzer& buzzer,
     sessionSelectMenu(*this),
     sessionSetupMenu(*this),
     currentMenu(&mainMenu),
-    clock(clock), relay(relay), buzzer(buzzer), lcd(lcd),
+    hardwareManager(hwm),
     morningSession(morningSession),
     eveningSession(eveningSession),
     selectedSession(morningSession)
@@ -21,7 +20,7 @@ UserInterface::UserInterface(Clock& clock, Relay& relay, Buzzer& buzzer,
 void UserInterface::setMenu(Menu* menu)
 {
     currentMenu = menu;
-    menu->initalize(lcd);   
+    menu->initalize(hardwareManager.getDisplay());
 }
 
 void UserInterface::setSelectedSession(LightingSession* session)
@@ -32,22 +31,22 @@ void UserInterface::setSelectedSession(LightingSession* session)
 
 void UserInterface::onLeftPress()
 {
-    currentMenu->leftPressHandler(buzzer);
+    currentMenu->leftPressHandler(hardwareManager.buzzer);
 }
 
 void UserInterface::onMiddlePress()
 {
-    currentMenu->middlePressHandler(buzzer);
+    currentMenu->middlePressHandler(hardwareManager.buzzer);
 }
 
 void UserInterface::onRightPress()
 {
-    currentMenu->rightPressHandler(buzzer);
+    currentMenu->rightPressHandler(hardwareManager.buzzer);
 }
 
 void UserInterface::updateDisplay(uint8_t lightLevel)
 {
-    currentMenu->updateDisplay(lcd, lightLevel);
+    currentMenu->updateDisplay(hardwareManager.getDisplay(), lightLevel);
 }
 
 void UserInterface::resetMenu()

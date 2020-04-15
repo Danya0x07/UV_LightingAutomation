@@ -1,11 +1,8 @@
 #pragma once
 
 #include <Arduino.h>
-#include <LiquidCrystal.h>
 
-#include <Clock.h>
-#include <Relay.h>
-#include <Buzzer.h>
+#include <HardwareManager.h>
 #include <LightingSession.h>
 
 class UserInterface;
@@ -74,7 +71,6 @@ private:
     static const int8_t minSettingsBounds[NUM_OF_SETTINGS];
     static const int8_t maxSettingsBounds[NUM_OF_SETTINGS];
     static const uint8_t settingsLcdColumns[NUM_OF_SETTINGS];
-    DateTime settings;
     int8_t tempSettings[NUM_OF_SETTINGS];
     uint8_t currentPos;
 
@@ -152,17 +148,14 @@ private:
     SessionSetupMenu sessionSetupMenu;
     Menu* currentMenu;
 
-    Clock& clock;
-    Relay& relay;
-    Buzzer& buzzer;
-    LiquidCrystal* const lcd;
+    HardwareManager& hardwareManager;
 
     LightingSession* const morningSession;
     LightingSession* const eveningSession;
     LightingSession* selectedSession;
 
 public:
-    explicit UserInterface(Clock&, Relay&, Buzzer&, LiquidCrystal*,
+    explicit UserInterface(HardwareManager& hwm,
                            LightingSession*, LightingSession*);
 
     Menu* getMainMenu() { return &mainMenu; }
@@ -172,8 +165,7 @@ public:
     Menu* getSessionSetupMenu() { return &sessionSetupMenu; }
     void setMenu(Menu*);
 
-    Clock& getClock() { return clock; }
-    Relay& getRelay() { return relay; }
+    HardwareManager& getHardware() { return hardwareManager; }
 
     LightingSession* getMorningSession() { return morningSession; }
     LightingSession* getEveningSession() { return eveningSession; }

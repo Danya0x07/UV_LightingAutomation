@@ -26,14 +26,14 @@ const uint8_t ClockSetupMenu::settingsLcdColumns[NUM_OF_SETTINGS] = {
 };
 
 ClockSetupMenu::ClockSetupMenu(UserInterface& ui)
-    : Menu(ui), settings(), tempSettings{}, currentPos(0)
+    : Menu(ui), tempSettings{}, currentPos(0)
 {
 
 }
 
 void ClockSetupMenu::initalize(LiquidCrystal* lcd)
 {
-    settings = ui.getClock().getTime();
+    DateTime settings = ui.getHardware().clock.getTime();
     tempSettings[HOUR]   = settings.hour();
     tempSettings[MINUTE] = settings.minute();
     tempSettings[YEAR]   = settings.year();
@@ -75,9 +75,9 @@ void ClockSetupMenu::rightPressHandler(Buzzer& buzzer)
 {
     buzzer.buzz(2, 150);
     validateDate(&tempSettings[DAY], tempSettings[MONTH], tempSettings[YEAR]);
-    settings = DateTime(tempSettings[YEAR], tempSettings[MONTH], tempSettings[DAY],
+    DateTime settings = DateTime(tempSettings[YEAR], tempSettings[MONTH], tempSettings[DAY],
                         tempSettings[HOUR], tempSettings[MINUTE], 0);
-    ui.getClock().setTime(settings);
+    ui.getHardware().clock.setTime(settings);
     if (++currentPos >= NUM_OF_SETTINGS) {
         ui.setMenu(ui.getMainMenu());
         currentPos = 0;   // на всякий случай

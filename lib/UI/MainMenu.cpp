@@ -19,7 +19,7 @@ void MainMenu::leftPressHandler(Buzzer& buzzer)
 void MainMenu::middlePressHandler(Buzzer& buzzer)
 {
     buzzer.buzz(2, 150);
-    ui.getRelay().switchState();
+    ui.getHardware().relay.switchState();
 }
 
 void MainMenu::rightPressHandler(Buzzer& buzzer)
@@ -30,13 +30,13 @@ void MainMenu::rightPressHandler(Buzzer& buzzer)
 
 void MainMenu::updateDisplay(LiquidCrystal* lcd, uint8_t lightLevel)
 {
-    DateTime dateTime = ui.getClock().getTime();
+    DateTime dateTime = ui.getHardware().clock.getTime();
     uint8_t hour = dateTime.hour();
     uint8_t minute = dateTime.minute();
     uint8_t day = dateTime.day();
     uint8_t month = dateTime.month();
     uint8_t year = (dateTime.year() - 2000) % 100;
-    bool relayState = ui.getRelay().getState();
+    bool relayState = ui.getHardware().relay.getState();
 
     if (lcd == nullptr)
         return;

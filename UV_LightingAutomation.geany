@@ -28,24 +28,28 @@ long_line_behaviour=1
 long_line_column=80
 
 [files]
-current_page=4
-FILE_NAME_0=573;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Fsrc%2Fmain.cpp;0;4
-FILE_NAME_1=746;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Ftest%2Fonboard%2Ftest.cpp;0;4
-FILE_NAME_2=350;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Flib%2FRelay%2FRelay.h;0;4
-FILE_NAME_3=270;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Flib%2FButtons%2FButtons.h;0;4
-FILE_NAME_4=430;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Flib%2FRelay%2FRelay.cpp;0;4
-FILE_NAME_5=831;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Flib%2FHardware%2FHardware.h;0;4
-FILE_NAME_6=0;Conf;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Fplatformio.ini;0;4
+current_page=0
+FILE_NAME_0=2515;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Fsrc%2Fmain.cpp;0;4
+FILE_NAME_1=89;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Flib%2FHardwareManager%2FHardwareManager.cpp;0;4
+FILE_NAME_2=474;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Flib%2FHardwareManager%2FHardwareManager.h;0;4
+FILE_NAME_3=5308;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Flib%2FUI%2FUI.h;0;4
+FILE_NAME_4=686;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Flib%2FUI%2FMainMenu.cpp;0;4
+FILE_NAME_5=2039;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Flib%2FUI%2FClockSetupMenu.cpp;0;4
+FILE_NAME_6=0;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Flib%2FUI%2FSessionSetupMenu.cpp;0;4
+FILE_NAME_7=862;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Flib%2FUI%2FUI.cpp;0;4
+FILE_NAME_8=20;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Ftest%2Fonboard%2Ftest.cpp;0;4
+FILE_NAME_9=2041;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Ftest%2Fonboard%2FTestSessions.cpp;0;4
+FILE_NAME_10=415;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Ftest%2Fonboard%2FTestHardware.cpp;0;4
 
 [VTE]
 last_dir=/home/danya/Documents/PlatformIO/Projects/200320-211727-nanoatmega328
 
 [build-menu]
-C++FT_00_LB=
-C++FT_00_CM=
+C++FT_00_LB=Build
+C++FT_00_CM=pio run
 C++FT_00_WD=%p
-C++FT_01_LB=
-C++FT_01_CM=
+C++FT_01_LB=Build test
+C++FT_01_CM=pio test --without-uploading --without-testing
 C++FT_01_WD=%p
 C++FT_02_LB=
 C++FT_02_CM=

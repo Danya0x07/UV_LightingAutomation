@@ -5,39 +5,26 @@
 #include <Arduino_FreeRTOS.h>
 #include <timers.h>
 
-#include <Buttons.h>
-#include <Relay.h>
-#include <Buzzer.h>
-#include <Clock.h>
-#include <LightSensor.h>
+#include <HardwareManager.h>
 #include <LightingSession.h>
 #include <UI.h>
 
-Button leftButton(10, PULLUP);   // кнопка, пробуждающая дисплей
-Button middleButton(11, PULLUP); // кнопка, переключающая реле
-Button rightButton(9, PULLUP);   // кнопка, начинающая сеанс настройки
-Relay relay(A1, INVERTED);
-Buzzer buzzer(8, NORMAL);
-Clock rtclock(A3, A2);
-LightSensor lightSensor(A6);
-LiquidCrystal lcd(2, 3, 4, 5, 6, 7);
+HardwareManager hm;
 LightingSession morningSession, eveningSession;
-UserInterface ui(rtclock, relay, buzzer, &lcd, &morningSession, &eveningSession);
+UserInterface ui(hm, &morningSession, &eveningSession);
 
 TaskHandle_t updateDisplayTaskHandle;
-TimerHandle_t disableDisplayTimerHandle;
+TimerHandle_t disableUiTimerHandle;
 
 void checkButtonsTask(void* unused);
 void performLightingTask(void* unused);
 void updateDisplayTask(void* unused);
-void enableDisplay();
-void disableDisplay(TimerHandle_t unused);
+
+void enableUI();
+void disableUI(TimerHandle_t unused);
 
 void setup()
 {
-    lcd.setBacklightPin(12, POSITIVE);
-    lcd.begin(16, 2);
-
     LightingSession::setStartAddress(0);
     morningSession.loadFromEeprom();
     eveningSession.loadFromEeprom();
@@ -51,10 +38,10 @@ void setup()
     xTaskCreate(updateDisplayTask, "updisp", 128,
                 NULL, 1, &updateDisplayTaskHandle);
 
-    disableDisplayTimerHandle = xTimerCreate("uidis", pdMS_TO_TICKS(7000),
-                                             pdFALSE, NULL, disableDisplay);
+    disableUiTimerHandle = xTimerCreate("uidis", pdMS_TO_TICKS(7000),
+                                        pdFALSE, NULL, disableUI);
 
-    xTimerStart(disableDisplayTimerHandle, 100);
+    xTimerStart(disableUiTimerHandle, 100);
 }
 
 void loop()
@@ -64,25 +51,22 @@ void loop()
 
 void checkButtonsTask(void* unused)
 {
+    uint8_t events = 0;
+
     for (;;)
     {
-        bool leftPress = leftButton.hasBeenPressed();
-        bool middlePress = middleButton.hasBeenPressed();
-        bool rightPress = rightButton.hasBeenPressed();
+        events = hm.getPressEvents();
 
-        if (leftPress || middlePress || rightPress) {
-            enableDisplay();
+        if (events & HardwareManager::PRESS_WAS) {
+            enableUI();
         }
-
-        if (leftPress) {
+        if (events & HardwareManager::PRESS_LEFT) {
             ui.onLeftPress();
         }
-
-        if (middlePress) {
+        if (events & HardwareManager::PRESS_MIDDLE) {
             ui.onMiddlePress();
         }
-
-        if (rightPress) {
+        if (events & HardwareManager::PRESS_RIGHT) {
             ui.onRightPress();
         }
 
@@ -99,18 +83,18 @@ void performLightingTask(void* unused)
     bool relayHasBeenEnabled = false;
 
     for (;;) {
-        currentTime = rtclock.getTime();
-        lightLevel = lightSensor.getValue();
+        currentTime = hm.clock.getTime();
+        lightLevel = hm.getLightLevel();
         relayMustBeEnabled = morningSession.hasToBeUnderway(currentTime, (uint8_t)lightLevel) ||
                              eveningSession.hasToBeUnderway(currentTime, (uint8_t)lightLevel);
         if (relayMustBeEnabled) {
             if (relayHasBeenEnabled == false) {
-                relay.setState(1);
+                hm.relay.setState(1);
                 relayHasBeenEnabled = true;
             }
         } else {
             if (relayHasBeenEnabled == true) {
-                relay.setState(0);
+                hm.relay.setState(0);
                 relayHasBeenEnabled = false;
             }
         }
@@ -120,25 +104,22 @@ void performLightingTask(void* unused)
 
 void updateDisplayTask(void* unused)
 {
-
     for (;;) {
-        ui.updateDisplay(lightSensor.getValue());
+        ui.updateDisplay(hm.getLightLevel());
         vTaskDelay(pdMS_TO_TICKS(500));
     }
 }
 
-void enableDisplay()
+void enableUI()
 {
-    lcd.backlight();
-    lcd.display();
+    hm.enableDisplay();
     vTaskResume(updateDisplayTaskHandle);
-    xTimerReset(disableDisplayTimerHandle, 100);
+    xTimerReset(disableUiTimerHandle, 100);
 }
 
-void disableDisplay(TimerHandle_t unused)
+void disableUI(TimerHandle_t unused)
 {
-    lcd.noBacklight();
-    lcd.noDisplay();
+    hm.disableDisplay();
     ui.resetMenu();
     vTaskSuspend(updateDisplayTaskHandle);
 }
