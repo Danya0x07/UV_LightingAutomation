@@ -8,9 +8,9 @@
 #include <LightingSession.h>
 #include <UI.h>
 
-Relay relay(A1, true);
+Relay relay(A1, INVERTED);
 Clock rtclock(A3, A2);
-Buzzer buzzer(8, false);
+Buzzer buzzer(8, NORMAL);
 LightingSession morningSession, eveningSession;
 UserInterface ui(rtclock, relay, buzzer, nullptr, &morningSession, &eveningSession);
 
@@ -27,9 +27,9 @@ void testRelay()
 
 void testButtons()
 {
-    Button leftButton(10, true);
-    Button middleButton(11, true);
-    Button rightButton(9, true);
+    Button leftButton(10, PULLUP);
+    Button middleButton(11, PULLUP);
+    Button rightButton(9, PULLUP);
 
     /*
      * В состоянии покоя кнопки не должны быть нажаты,

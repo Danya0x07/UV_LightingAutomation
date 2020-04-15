@@ -1,8 +1,8 @@
 #include "Relay.h"
 
-Relay::Relay(uint8_t pin, bool inverted = false) : pin(pin), inverted(inverted)
+Relay::Relay(uint8_t pin_, bool inverted_) : DigitalOnePinDevice(pin_, inverted_)
 {
-    pinMode(pin, OUTPUT);
+    pinMode(pin_, OUTPUT);
 
     /* Выходы для зелёного светодиода, показывающего, замкнуто ли реле. */
     pinMode(A0, OUTPUT);  // VCC
@@ -15,6 +15,6 @@ Relay::Relay(uint8_t pin, bool inverted = false) : pin(pin), inverted(inverted)
 
 void Relay::setState(bool state)
 {
-    digitalWrite(pin, state != inverted);
+    setLogicLevel(state);
     digitalWrite(A0, state);
 }

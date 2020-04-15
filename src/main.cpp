@@ -13,11 +13,11 @@
 #include <LightingSession.h>
 #include <UI.h>
 
-Button leftButton(10, true);   // кнопка, пробуждающая дисплей
-Button middleButton(11, true); // кнопка, переключающая реле
-Button rightButton(9, true);   // кнопка, начинающая сеанс настройки
-Relay relay(A1, true);
-Buzzer buzzer(8, false);
+Button leftButton(10, PULLUP);   // кнопка, пробуждающая дисплей
+Button middleButton(11, PULLUP); // кнопка, переключающая реле
+Button rightButton(9, PULLUP);   // кнопка, начинающая сеанс настройки
+Relay relay(A1, INVERTED);
+Buzzer buzzer(8, NORMAL);
 Clock rtclock(A3, A2);
 LightSensor lightSensor(A6);
 LiquidCrystal lcd(2, 3, 4, 5, 6, 7);

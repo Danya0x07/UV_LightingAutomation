@@ -2,26 +2,18 @@
 
 #include <Arduino.h>
 
+#include <PinDevice.h>
+
 /**
  * Обёртка над пьезопищалкой для инкапсуляции инициализации пинов
  * и удобного переключения с учётом возможной инверсности управления.
  */
-class Buzzer
+class Buzzer : private DigitalOnePinDevice
 {
-private:
-    const uint8_t pin;
-    const bool inverted;
-
 public:
-    explicit Buzzer(uint8_t pin, bool inverted);
+    explicit Buzzer(uint8_t pin_, bool inverted_);
 
-    void startBuzzing() {
-        digitalWrite(pin, !inverted);
-    }
-
-    void stopBuzzing() {
-        digitalWrite(pin, inverted);
-    }
-
+    void startBuzzing() { setLogicLevel(true); }
+    void stopBuzzing() { setLogicLevel(false); }
     void buzz(uint8_t times, uint8_t ms);
 };

@@ -2,29 +2,19 @@
 
 #include <Arduino.h>
 
+#include <PinDevice.h>
+
 /**
  * Обёртка над реле для инкапсуляции инициализации пинов
  * и удобного переключения с учётом возможной инверсности управления.
  */
-class Relay
+class Relay : private DigitalOnePinDevice
 {
-private:
-    const uint8_t pin;
-    const bool inverted;
-
 public:
-    explicit Relay(uint8_t pin, bool inverted);
+    explicit Relay(uint8_t pin_, bool inverted_);
 
     void setState(bool state);
-
-    bool getState()
-    {
-        return bool(digitalRead(pin)) != inverted;
-    }
-
-    void switchState()
-    {
-        setState(!getState());
-    }
+    bool getState() { return getLogicLevel();}
+    void switchState() { setState(!getState());}
 };
 

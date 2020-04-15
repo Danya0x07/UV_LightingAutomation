@@ -1,0 +1,112 @@
+[editor]
+line_wrapping=false
+line_break_column=80
+auto_continue_multiline=true
+
+[file_prefs]
+final_new_line=true
+ensure_convert_new_lines=true
+strip_trailing_spaces=true
+replace_tabs=true
+
+[indentation]
+indent_width=4
+indent_type=0
+indent_hard_tab_width=8
+detect_indent=false
+detect_indent_width=false
+indent_mode=2
+
+[project]
+name=UV_LightingAutomation
+base_path=/home/danya/Documents/PlatformIO/Projects/200320-211727-nanoatmega328
+description=
+file_patterns=
+
+[long line marker]
+long_line_behaviour=1
+long_line_column=80
+
+[files]
+current_page=4
+FILE_NAME_0=573;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Fsrc%2Fmain.cpp;0;4
+FILE_NAME_1=746;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Ftest%2Fonboard%2Ftest.cpp;0;4
+FILE_NAME_2=350;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Flib%2FRelay%2FRelay.h;0;4
+FILE_NAME_3=270;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Flib%2FButtons%2FButtons.h;0;4
+FILE_NAME_4=430;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Flib%2FRelay%2FRelay.cpp;0;4
+FILE_NAME_5=831;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Flib%2FHardware%2FHardware.h;0;4
+FILE_NAME_6=0;Conf;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Fplatformio.ini;0;4
+
+[VTE]
+last_dir=/home/danya/Documents/PlatformIO/Projects/200320-211727-nanoatmega328
+
+[build-menu]
+C++FT_00_LB=
+C++FT_00_CM=
+C++FT_00_WD=%p
+C++FT_01_LB=
+C++FT_01_CM=
+C++FT_01_WD=%p
+C++FT_02_LB=
+C++FT_02_CM=
+C++FT_02_WD=%p
+filetypes=C++;
+NF_00_LB=Clean
+NF_00_CM=pio run -t clean
+NF_00_WD=%p
+NF_02_LB=
+NF_02_CM=
+NF_02_WD=%p
+EX_00_LB=Build
+EX_00_CM=pio run 
+EX_00_WD=%p
+C++FT_03_LB=Repeat test
+C++FT_03_CM=pio test --without-building
+C++FT_03_WD=%p
+C++FT_04_LB=Check
+C++FT_04_CM=pio check
+C++FT_04_WD=%p
+NF_01_LB=Upload
+NF_01_CM=pio run -t upload -e
+NF_01_WD=%p
+NF_03_LB=
+NF_03_CM=
+NF_03_WD=%p
+EX_01_LB=Build test
+EX_01_CM=pio test --without-uploading --without-testing
+EX_01_WD=%p
+EX_02_LB=Test
+EX_02_CM=pio test
+EX_02_WD=%p
+EX_03_LB=Test again
+EX_03_CM=pio test --without-building --without-uploading
+EX_03_WD=%p
+NF_04_LB=
+NF_04_CM=
+NF_04_WD=%p
+EX_04_LB=Production test
+EX_04_CM=pio remote test -e productionboard
+EX_04_WD=%p
+EX_05_LB=Production test again
+EX_05_CM=pio remote test -e productionboard --without-building --without-uploading
+EX_05_WD=%p
+EX_06_LB=Check
+EX_06_CM=pio check
+EX_06_WD=%p
+EX_07_LB=Serial port
+EX_07_CM=pio device monitor
+EX_07_WD=%p
+EX_08_LB=Remote serial monitor
+EX_08_CM=pio remote device monitor
+EX_08_WD=%p
+EX_09_LB=Remote upload
+EX_09_CM=pio remote run -t upload -e productionboard
+EX_09_WD=%p
+
+[prjorg]
+source_patterns=*.c;*.C;*.cpp;*.cxx;*.c++;*.cc;*.m;
+header_patterns=*.h;*.H;*.hpp;*.hxx;*.h++;*.hh;
+ignored_dirs_patterns=.*;CVS;
+ignored_file_patterns=*.o;*.obj;*.a;*.lib;*.so;*.dll;*.lo;*.la;*.class;*.jar;*.pyc;*.mo;*.gmo;
+generate_tag_prefs=0
+external_dirs=

@@ -3,19 +3,14 @@
 #define DEBOUNCE_DURATION_MS 5
 #define DOUBLEPRESS_SCAN_CYCLES 370
 
-Button::Button(uint8_t pin, bool inverted) : pin(pin), inverted(inverted)
+Button::Button(uint8_t pin_, bool inverted_) : DigitalOnePinDevice(pin_, inverted_)
 {
-    pinMode(pin, inverted ? INPUT_PULLUP : INPUT);
+    pinMode(pin, inverted_ ? INPUT_PULLUP : INPUT);
     lastState = digitalRead(pin);
 }
 
-bool Button::isPressed()
-{
-    return bool(digitalRead(pin)) != inverted;
-}
-
 bool Button::hasBeenPressed()
-{ 
+{
     bool pressed = false;
     bool currentState = isPressed();
     if (lastState != currentState) {
