@@ -7,14 +7,16 @@
  * Представление сеанса УФ досветки.
  * Определяется начальным и конечным временами,
  * пороговым значением освещённости и текущим статусом
- * активности.
+ * активности. id нужен для автоматического вычисления
+ * адреса сохранения в EEPROM.
  */
 class LightingSession
 {
 private:
+    static uint16_t startAddress;
     static uint8_t nextId;
-    uint8_t id;
 
+    uint8_t id;
     /* Часть, которая сохраняется в EEPROM. */
     bool isActive;
     uint8_t lightThreshold;
@@ -23,13 +25,13 @@ private:
 
 public:
     explicit LightingSession();
-    
+
     void loadFromEeprom(uint16_t address);
     void loadFromEeprom();
     void saveToEeprom(uint16_t address);
     void saveToEeprom();
     bool hasToBeUnderway(const DateTime& currentTime, uint8_t lightLevel);
-    
+
     void setActive(bool active) {isActive = active;}
     void setLightThreshold(uint8_t);
     void setStartTime(uint8_t hour, uint8_t minute);
@@ -44,6 +46,7 @@ public:
 
     bool operator==(const LightingSession&);
     bool operator!=(const LightingSession&);
-    
+
     static uint8_t getActualEepromPayloadSize() { return 6; }
+    static void setStartAddress(uint16_t);
 };

@@ -38,8 +38,9 @@ void setup()
     lcd.setBacklightPin(12, POSITIVE);
     lcd.begin(16, 2);
 
-    morningSession.loadFromEeprom(0 * LightingSession::getActualEepromPayloadSize());
-    eveningSession.loadFromEeprom(1 * LightingSession::getActualEepromPayloadSize());
+    LightingSession::setStartAddress(0);
+    morningSession.loadFromEeprom();
+    eveningSession.loadFromEeprom();
 
     xTaskCreate(checkButtonsTask, "chbtns", 128,
                 NULL, 1, NULL);

@@ -1,6 +1,7 @@
 #include "LightingSession.h"
 #include <EEPROM.h>
 
+uint16_t LightingSession::startAddress = 0;
 uint8_t LightingSession::nextId = 0;
 
 LightingSession::LightingSession() : startTime(0), endTime(0)
@@ -19,7 +20,7 @@ void LightingSession::loadFromEeprom(uint16_t address)
     uint8_t eh = EEPROM.read(address + 4);
     uint8_t em = EEPROM.read(address + 5);
 
-    if (sh > 23 || eh > 23 || sm > 59 || em > 59 || 
+    if (sh > 23 || eh > 23 || sm > 59 || em > 59 ||
             lt > 100 || ((active & ~0x01) != 0)) {
         return;
     }
@@ -32,7 +33,7 @@ void LightingSession::loadFromEeprom(uint16_t address)
 
 void LightingSession::loadFromEeprom()
 {
-    loadFromEeprom(id * getActualEepromPayloadSize());
+    loadFromEeprom(startAddress + id * getActualEepromPayloadSize());
 }
 
 void LightingSession::saveToEeprom(uint16_t address)
@@ -47,13 +48,13 @@ void LightingSession::saveToEeprom(uint16_t address)
 
 void LightingSession::saveToEeprom()
 {
-    saveToEeprom(id * getActualEepromPayloadSize());
+    saveToEeprom(startAddress + id * getActualEepromPayloadSize());
 }
 
 bool LightingSession::hasToBeUnderway(const DateTime& currentTime, uint8_t lightLevel)
 {
     DateTime relativeTime = DateTime(0, 0, 0, currentTime.hour(), currentTime.minute(), 0);
-    return isActive && (lightLevel <= lightThreshold) && 
+    return isActive && (lightLevel <= lightThreshold) &&
            (relativeTime >= startTime) && (relativeTime < endTime);
 }
 
@@ -90,7 +91,7 @@ void LightingSession::getEndTime(uint8_t* hour, uint8_t* minute)
 
 bool LightingSession::operator==(const LightingSession& other)
 {
-    return this->isActive == other.isActive && 
+    return this->isActive == other.isActive &&
            this->lightThreshold == other.lightThreshold &&
            this->startTime == other.startTime &&
            this->endTime == other.endTime;
@@ -99,4 +100,9 @@ bool LightingSession::operator==(const LightingSession& other)
 bool LightingSession::operator!=(const LightingSession& other)
 {
     return !(*this == other);
+}
+
+void LightingSession::setStartAddress(uint16_t address)
+{
+    startAddress = address;
 }
