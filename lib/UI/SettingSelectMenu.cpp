@@ -14,23 +14,23 @@ void SettingSelectMenu::initalize(LiquidCrystal* lcd)
     }
 }
 
-void SettingSelectMenu::leftPressHandler(Buzzer& buzzer)
+void SettingSelectMenu::leftPressHandler()
 {
-    buzzer.buzz(1, 150);
+    ui.makeSound(UserInterface::CHANGE_VALUE);
     if (--currentItem < 0)
         currentItem = 0;
 }
 
-void SettingSelectMenu::middlePressHandler(Buzzer& buzzer)
+void SettingSelectMenu::middlePressHandler()
 {
-    buzzer.buzz(1, 150);
+    ui.makeSound(UserInterface::CHANGE_VALUE);
     if (++currentItem >= NUM_OF_ITEMS)
         currentItem = NUM_OF_ITEMS - 1;
 }
 
-void SettingSelectMenu::rightPressHandler(Buzzer& buzzer)
+void SettingSelectMenu::rightPressHandler()
 {
-    buzzer.buzz(2, 150);
+    ui.makeSound(UserInterface::MENU_TRANSITION);
     switch (currentItem)
     {
     case ITEM_SESSIONS:

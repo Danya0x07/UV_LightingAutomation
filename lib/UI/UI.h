@@ -20,9 +20,9 @@ public:
     explicit Menu(UserInterface& ui_) : ui(ui_) {}
 
     virtual void initalize(LiquidCrystal*) = 0;
-    virtual void leftPressHandler(Buzzer&) = 0;
-    virtual void middlePressHandler(Buzzer&) = 0;
-    virtual void rightPressHandler(Buzzer&) = 0;
+    virtual void leftPressHandler() = 0;
+    virtual void middlePressHandler() = 0;
+    virtual void rightPressHandler() = 0;
     virtual void updateDisplay(LiquidCrystal*) = 0;
 };
 
@@ -36,9 +36,9 @@ public:
     explicit MainMenu(UserInterface& ui_) : Menu(ui_) {}
 
     void initalize(LiquidCrystal*) override;
-    void leftPressHandler(Buzzer&) override;
-    void middlePressHandler(Buzzer&) override;
-    void rightPressHandler(Buzzer&) override;
+    void leftPressHandler() override;
+    void middlePressHandler() override;
+    void rightPressHandler() override;
     void updateDisplay(LiquidCrystal*) override;
 };
 
@@ -57,9 +57,9 @@ public:
     explicit SettingSelectMenu(UserInterface& ui_) : Menu(ui_), currentItem(0) {}
 
     void initalize(LiquidCrystal*) override;
-    void leftPressHandler(Buzzer&) override;
-    void middlePressHandler(Buzzer&) override;
-    void rightPressHandler(Buzzer&) override;
+    void leftPressHandler() override;
+    void middlePressHandler() override;
+    void rightPressHandler() override;
     void updateDisplay(LiquidCrystal*) override;
 };
 
@@ -80,9 +80,9 @@ public:
     explicit ClockSetupMenu(UserInterface& ui_);
 
     void initalize(LiquidCrystal*) override;
-    void leftPressHandler(Buzzer&) override;
-    void middlePressHandler(Buzzer&) override;
-    void rightPressHandler(Buzzer&) override;
+    void leftPressHandler() override;
+    void middlePressHandler() override;
+    void rightPressHandler() override;
     void updateDisplay(LiquidCrystal*) override;
 };
 
@@ -101,9 +101,9 @@ public:
     explicit SessionSelectMenu(UserInterface& ui_) : Menu(ui_), currentItem(0) {}
 
     void initalize(LiquidCrystal*) override;
-    void leftPressHandler(Buzzer&) override;
-    void middlePressHandler(Buzzer&) override;
-    void rightPressHandler(Buzzer&) override;
+    void leftPressHandler() override;
+    void middlePressHandler() override;
+    void rightPressHandler() override;
     void updateDisplay(LiquidCrystal*) override;
 };
 
@@ -127,9 +127,9 @@ public:
     explicit SessionSetupMenu(UserInterface& ui_);
 
     void initalize(LiquidCrystal*) override;
-    void leftPressHandler(Buzzer&) override;
-    void middlePressHandler(Buzzer&) override;
-    void rightPressHandler(Buzzer&) override;
+    void leftPressHandler() override;
+    void middlePressHandler() override;
+    void rightPressHandler() override;
     void updateDisplay(LiquidCrystal*) override;
 };
 
@@ -149,6 +149,13 @@ private:
     Menu* currentMenu;
 
 public:
+    enum Sound : uint8_t {
+        DISPLAY_AWAKE,
+        CHANGE_VALUE,
+        CONFIRM_VALUE,
+        MENU_TRANSITION
+    };
+
     HardwareManager& hardware;
     SessionManager& sessions;
 
@@ -159,10 +166,12 @@ public:
     Menu* getClockSetupMenu() { return &clockSetupMenu; }
     Menu* getSessionSelectMenu() { return &sessionSelectMenu; }
     Menu* getSessionSetupMenu() { return &sessionSetupMenu; }
-    void setMenu(Menu*);
 #ifdef UNIT_TEST
     Menu* getMenu() { return currentMenu; }
 #endif
+    void setMenu(Menu*);
+
+    void makeSound(Sound);
 
     void onLeftPress();
     void onMiddlePress();

@@ -11,20 +11,20 @@ void MainMenu::initalize(LiquidCrystal* lcd)
     }
 }
 
-void MainMenu::leftPressHandler(Buzzer& buzzer)
+void MainMenu::leftPressHandler()
 {
-    buzzer.buzz(1, 170);
+    ui.makeSound(UserInterface::DISPLAY_AWAKE);
 }
 
-void MainMenu::middlePressHandler(Buzzer& buzzer)
+void MainMenu::middlePressHandler()
 {
-    buzzer.buzz(2, 150);
+    ui.makeSound(UserInterface::DISPLAY_AWAKE);
     ui.hardware.relay.switchState();
 }
 
-void MainMenu::rightPressHandler(Buzzer& buzzer)
+void MainMenu::rightPressHandler()
 {
-    buzzer.buzz(1, 150);
+    ui.makeSound(UserInterface::DISPLAY_AWAKE);
     ui.setMenu(ui.getSettingSelectMenu());
 }
 

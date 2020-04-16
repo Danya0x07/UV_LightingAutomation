@@ -34,9 +34,9 @@ void SessionSetupMenu::initalize(LiquidCrystal* lcd)
     }
 }
 
-void SessionSetupMenu::leftPressHandler(Buzzer& buzzer)
+void SessionSetupMenu::leftPressHandler()
 {
-    buzzer.buzz(1, 150);
+    ui.makeSound(UserInterface::CHANGE_VALUE);
     int8_t setting = tempSettings[currentPos];
     if (++setting > maxSettingsBounds[currentPos]) {
         setting = 0;
@@ -44,9 +44,9 @@ void SessionSetupMenu::leftPressHandler(Buzzer& buzzer)
     tempSettings[currentPos] = setting;
 }
 
-void SessionSetupMenu::middlePressHandler(Buzzer& buzzer)
+void SessionSetupMenu::middlePressHandler()
 {
-    buzzer.buzz(1, 150);
+    ui.makeSound(UserInterface::CHANGE_VALUE);
     int8_t setting = tempSettings[currentPos];
     if (--setting < 0) {
         setting = maxSettingsBounds[currentPos];
@@ -54,9 +54,8 @@ void SessionSetupMenu::middlePressHandler(Buzzer& buzzer)
     tempSettings[currentPos] = setting;
 }
 
-void SessionSetupMenu::rightPressHandler(Buzzer& buzzer)
+void SessionSetupMenu::rightPressHandler()
 {
-    buzzer.buzz(2, 150);
     LightingSession* selectedSession = ui.sessions.getSelected();
     selectedSession->setActive(bool(tempSettings[ACTIVITY]));
     selectedSession->setLightThreshold(tempSettings[THRESHOLD]);
@@ -64,8 +63,11 @@ void SessionSetupMenu::rightPressHandler(Buzzer& buzzer)
     selectedSession->setEndTime(tempSettings[ENDHOUR], tempSettings[ENDMINUTE]);
 
     if (++currentPos >= NUM_OF_SETTINGS) {
+        ui.makeSound(UserInterface::MENU_TRANSITION);
         ui.sessions.save();
         ui.setMenu(ui.getMainMenu());
+    } else {
+        ui.makeSound(UserInterface::CONFIRM_VALUE);
     }
 }
 

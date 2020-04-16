@@ -50,9 +50,9 @@ void ClockSetupMenu::initalize(LiquidCrystal* lcd)
     }
 }
 
-void ClockSetupMenu::leftPressHandler(Buzzer& buzzer)
+void ClockSetupMenu::leftPressHandler()
 {
-    buzzer.buzz(1, 150);
+   ui.makeSound(UserInterface::CHANGE_VALUE);
     int8_t setting = tempSettings[currentPos];
     if (++setting > maxSettingsBounds[currentPos]) {
         setting = minSettingsBounds[currentPos];
@@ -60,9 +60,9 @@ void ClockSetupMenu::leftPressHandler(Buzzer& buzzer)
     tempSettings[currentPos] = setting;
 }
 
-void ClockSetupMenu::middlePressHandler(Buzzer& buzzer)
+void ClockSetupMenu::middlePressHandler()
 {
-    buzzer.buzz(1, 150);
+    ui.makeSound(UserInterface::CHANGE_VALUE);
     int8_t setting = tempSettings[currentPos];
     if (--setting < minSettingsBounds[currentPos]) {
         setting = maxSettingsBounds[currentPos];
@@ -70,16 +70,18 @@ void ClockSetupMenu::middlePressHandler(Buzzer& buzzer)
     tempSettings[currentPos] = setting;
 }
 
-void ClockSetupMenu::rightPressHandler(Buzzer& buzzer)
+void ClockSetupMenu::rightPressHandler()
 {
-    buzzer.buzz(2, 150);
     validateDate(&tempSettings[DAY], tempSettings[MONTH], tempSettings[YEAR]);
     DateTime settings = DateTime(tempSettings[YEAR], tempSettings[MONTH], tempSettings[DAY],
                         tempSettings[HOUR], tempSettings[MINUTE], 0);
     ui.hardware.clock.setTime(settings);
     if (++currentPos >= NUM_OF_SETTINGS) {
+        ui.makeSound(UserInterface::MENU_TRANSITION);
         ui.setMenu(ui.getMainMenu());
         currentPos = 0;   // на всякий случай
+    } else {
+        ui.makeSound(UserInterface::CONFIRM_VALUE);
     }
 }
 

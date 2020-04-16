@@ -19,19 +19,30 @@ void UserInterface::setMenu(Menu* menu)
     menu->initalize(hardware.getDisplay());
 }
 
+void UserInterface::makeSound(Sound sound)
+{
+    switch (sound)
+    {
+    case DISPLAY_AWAKE:   hardware.buzzer.buzz(1, 150); break;
+    case CHANGE_VALUE:    hardware.buzzer.buzz(1, 100); break;
+    case CONFIRM_VALUE:   hardware.buzzer.buzz(1, 200); break;
+    case MENU_TRANSITION: hardware.buzzer.buzz(2, 100); break;
+    }
+}
+
 void UserInterface::onLeftPress()
 {
-    currentMenu->leftPressHandler(hardware.buzzer);
+    currentMenu->leftPressHandler();
 }
 
 void UserInterface::onMiddlePress()
 {
-    currentMenu->middlePressHandler(hardware.buzzer);
+    currentMenu->middlePressHandler();
 }
 
 void UserInterface::onRightPress()
 {
-    currentMenu->rightPressHandler(hardware.buzzer);
+    currentMenu->rightPressHandler();
 }
 
 void UserInterface::updateDisplay()
