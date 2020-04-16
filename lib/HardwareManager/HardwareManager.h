@@ -19,13 +19,7 @@ public:
     enum PressEvent : uint8_t {
         PRESS_LEFT   = 1 << 0,
         PRESS_MIDDLE = 1 << 1,
-        PRESS_RIGHT  = 1 << 2,
-
-        /**
-         * Значение, используемое для проверок того, что была нажата
-         * хотя бы одна кнопка.
-         */
-        PRESS_WAS = PRESS_LEFT | PRESS_MIDDLE | PRESS_RIGHT
+        PRESS_RIGHT  = 1 << 2
     };
 
     Button leftButton;
@@ -45,6 +39,8 @@ public:
      * произошедшие в момент вызова нажатия.
      */
     uint8_t getPressEvents();
+
+    /** Возвращает текущий уровень освещённости в диапазоне (0 - 100). */
     uint16_t getLightLevel();
 
     void enableDisplay();

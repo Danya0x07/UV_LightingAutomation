@@ -51,7 +51,7 @@ void checkButtonsTask(void* unused)
     {
         events = hardware.getPressEvents();
 
-        if (events & HardwareManager::PRESS_WAS) {
+        if (events != 0) {
             enableUI();
         }
         if (events & HardwareManager::PRESS_LEFT) {
@@ -79,7 +79,7 @@ void performLightingTask(void* unused)
         currentTime = hardware.clock.getTime();
         lightLevel = hardware.getLightLevel();
 
-        if (sessions.check(currentTime, lightLevel) & SessionManager::SESSION_ANY) {
+        if (sessions.check(currentTime, lightLevel) != 0) {
             if (relayHasBeenEnabled == false) {
                 hardware.relay.setState(1);
                 relayHasBeenEnabled = true;

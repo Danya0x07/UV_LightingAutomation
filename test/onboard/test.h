@@ -19,6 +19,7 @@ void testClock();
 
 void testSessionUnderwayDetection();
 void testSessionSavingLoading();
+void testSessionManager();
 
 void testMenuTransitions();
 void testMainMenuUI();

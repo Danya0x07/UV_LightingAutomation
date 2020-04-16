@@ -12,6 +12,7 @@ void processTests()
     RUN_TEST(testClock);
     RUN_TEST(testSessionUnderwayDetection);
     RUN_TEST(testSessionSavingLoading);
+    RUN_TEST(testSessionManager);
     RUN_TEST(testMenuTransitions);
     RUN_TEST(testMainMenuUI);
     RUN_TEST(testSessionConfiguringUI);

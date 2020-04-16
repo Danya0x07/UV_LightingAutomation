@@ -17,13 +17,7 @@ public:
 
     enum Session : uint8_t {
         SESSION_MORNING = 1 << 0,
-        SESSION_EVENING = 1 << 1,
-
-        /**
-         * Значение, используемое для проверок того, что идёт/прошёл
-         * хотя бы один сеанс.
-         */
-        SESSION_ANY = SESSION_MORNING | SESSION_EVENING
+        SESSION_EVENING = 1 << 1
     };
 
     SessionManager();
