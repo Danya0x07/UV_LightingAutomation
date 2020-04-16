@@ -28,16 +28,9 @@ long_line_behaviour=1
 long_line_column=80
 
 [files]
-current_page=5
-FILE_NAME_0=118;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Fsrc%2Fmain.cpp;0;4
-FILE_NAME_1=89;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Flib%2FHardwareManager%2FHardwareManager.cpp;0;4
-FILE_NAME_2=795;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Flib%2FHardwareManager%2FHardwareManager.h;0;4
-FILE_NAME_3=862;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Flib%2FUI%2FUI.cpp;0;4
-FILE_NAME_4=361;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Ftest%2Fonboard%2Ftest.cpp;0;4
-FILE_NAME_5=18;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Ftest%2Fonboard%2FTestSessions.cpp;0;4
-FILE_NAME_6=18;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Ftest%2Fonboard%2FTestUI.cpp;0;4
-FILE_NAME_7=128;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Ftest%2Fonboard%2Ftest.h;0;4
-FILE_NAME_8=1096;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Ftest%2Fonboard%2FTestHardware.cpp;0;4
+current_page=1
+FILE_NAME_0=0;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Flib%2FUI%2FUI.cpp;0;4
+FILE_NAME_1=715;C++;0;EUTF-8;0;1;0;%2Fhome%2Fdanya%2FDocuments%2FPlatformIO%2FProjects%2F200320-211727-nanoatmega328%2Fsrc%2Fmain.cpp;0;4
 
 [VTE]
 last_dir=/home/danya/Documents/PlatformIO/Projects/200320-211727-nanoatmega328
