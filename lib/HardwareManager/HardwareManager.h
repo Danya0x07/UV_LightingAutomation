@@ -20,6 +20,11 @@ public:
         PRESS_LEFT   = 1 << 0,
         PRESS_MIDDLE = 1 << 1,
         PRESS_RIGHT  = 1 << 2,
+
+        /**
+         * Значение, используемое для проверок того, что была нажата
+         * хотя бы одна кнопка.
+         */
         PRESS_WAS = PRESS_LEFT | PRESS_MIDDLE | PRESS_RIGHT
     };
 
@@ -35,6 +40,10 @@ public:
     HardwareManager(const HardwareManager& copy) = delete;
     HardwareManager& operator=(const HardwareManager& copy) = delete;
 
+    /**
+     * Возвращает битовую маску из перечисление PressEvent, содержащую
+     * произошедшие в момент вызова нажатия.
+     */
     uint8_t getPressEvents();
     uint16_t getLightLevel();
 

@@ -79,7 +79,7 @@ void performLightingTask(void* unused)
         currentTime = hardware.clock.getTime();
         lightLevel = hardware.getLightLevel();
 
-        if (sessions.getUnderway(currentTime, lightLevel) & SessionManager::SESSION_ANY) {
+        if (sessions.check(currentTime, lightLevel) & SessionManager::SESSION_ANY) {
             if (relayHasBeenEnabled == false) {
                 hardware.relay.setState(1);
                 relayHasBeenEnabled = true;

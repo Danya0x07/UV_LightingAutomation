@@ -8,14 +8,17 @@
 #include <UI.h>
 
 extern HardwareManager hardware;
-extern LightingSession morningSession, eveningSession;
+extern SessionManager sessions;
 extern UserInterface ui;
+
+void setUpTestSession();
 
 void testRelay();
 void testButtons();
 void testClock();
 
-void testLightingSession();
+void testSessionUnderwayDetection();
+void testSessionSavingLoading();
 
 void testMenuTransitions();
 void testMainMenuUI();

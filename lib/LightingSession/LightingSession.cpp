@@ -1,14 +1,9 @@
 #include "LightingSession.h"
 #include <EEPROM.h>
 
-uint16_t LightingSession::startAddress = 0;
-uint8_t LightingSession::nextId = 0;
-
-LightingSession::LightingSession() : startTime(0), endTime(0)
+LightingSession::LightingSession()
+    : isActive(false), lightThreshold(0), startTime(0), endTime(0)
 {
-    lightThreshold = 40;  // default stubby value
-    isActive = false;
-    id = nextId++;
 }
 
 void LightingSession::loadFromEeprom(uint16_t address)
@@ -31,11 +26,6 @@ void LightingSession::loadFromEeprom(uint16_t address)
     endTime = DateTime(0, 0, 0, eh, em, 0);
 }
 
-void LightingSession::loadFromEeprom()
-{
-    loadFromEeprom(startAddress + id * getActualEepromPayloadSize());
-}
-
 void LightingSession::saveToEeprom(uint16_t address)
 {
     EEPROM.update(address + 0, isActive);
@@ -44,11 +34,6 @@ void LightingSession::saveToEeprom(uint16_t address)
     EEPROM.update(address + 3, startTime.minute());
     EEPROM.update(address + 4, endTime.hour());
     EEPROM.update(address + 5, endTime.minute());
-}
-
-void LightingSession::saveToEeprom()
-{
-    saveToEeprom(startAddress + id * getActualEepromPayloadSize());
 }
 
 bool LightingSession::hasToBeUnderway(const DateTime& currentTime, uint8_t lightLevel)
@@ -100,9 +85,4 @@ bool LightingSession::operator==(const LightingSession& other)
 bool LightingSession::operator!=(const LightingSession& other)
 {
     return !(*this == other);
-}
-
-void LightingSession::setStartAddress(uint16_t address)
-{
-    startAddress = address;
 }

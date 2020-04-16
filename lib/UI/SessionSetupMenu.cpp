@@ -64,7 +64,7 @@ void SessionSetupMenu::rightPressHandler(Buzzer& buzzer)
     selectedSession->setEndTime(tempSettings[ENDHOUR], tempSettings[ENDMINUTE]);
 
     if (++currentPos >= NUM_OF_SETTINGS) {
-        selectedSession->saveToEeprom();  // TODO
+        ui.sessions.save();
         ui.setMenu(ui.getMainMenu());
     }
 }
