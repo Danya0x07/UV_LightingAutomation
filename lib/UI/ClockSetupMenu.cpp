@@ -1,4 +1,4 @@
-#include <UI.h>
+#include "UI.h"
 
 enum Month : int8_t {
     JANUARY = 1,
@@ -33,13 +33,12 @@ ClockSetupMenu::ClockSetupMenu(UserInterface& ui_)
 
 void ClockSetupMenu::initalize(LiquidCrystal* lcd)
 {
-    DateTime settings = ui.getHardware().clock.getTime();
+    DateTime settings = ui.hardware.clock.getTime();
     tempSettings[HOUR]   = settings.hour();
     tempSettings[MINUTE] = settings.minute();
     tempSettings[YEAR]   = settings.year();
     tempSettings[MONTH]  = settings.month();
     tempSettings[DAY]    = settings.day();
-
     currentPos = 0;
 
     if (lcd != nullptr) {
@@ -77,14 +76,14 @@ void ClockSetupMenu::rightPressHandler(Buzzer& buzzer)
     validateDate(&tempSettings[DAY], tempSettings[MONTH], tempSettings[YEAR]);
     DateTime settings = DateTime(tempSettings[YEAR], tempSettings[MONTH], tempSettings[DAY],
                         tempSettings[HOUR], tempSettings[MINUTE], 0);
-    ui.getHardware().clock.setTime(settings);
+    ui.hardware.clock.setTime(settings);
     if (++currentPos >= NUM_OF_SETTINGS) {
         ui.setMenu(ui.getMainMenu());
         currentPos = 0;   // на всякий случай
     }
 }
 
-void ClockSetupMenu::updateDisplay(LiquidCrystal* lcd, uint8_t lightLevel)
+void ClockSetupMenu::updateDisplay(LiquidCrystal* lcd)
 {
     if (lcd == nullptr)
         return;

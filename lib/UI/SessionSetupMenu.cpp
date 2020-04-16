@@ -1,4 +1,4 @@
-#include <UI.h>
+#include "UI.h"
 
 const int8_t SessionSetupMenu::maxSettingsBounds[NUM_OF_SETTINGS] = {
     1, 100, 23, 59, 23, 59
@@ -18,12 +18,11 @@ SessionSetupMenu::SessionSetupMenu(UserInterface& ui_)
 
 void SessionSetupMenu::initalize(LiquidCrystal* lcd)
 {
-    LightingSession* selectedSession = ui.getSelectedSession();
+    LightingSession* selectedSession = ui.sessions.getSelected();
     tempSettings[ACTIVITY] = selectedSession->getActive();
     tempSettings[THRESHOLD] = selectedSession->getLightThreshold();
     selectedSession->getStartTime(&tempSettings[STARTHOUR], &tempSettings[STARTMINUTE]);
     selectedSession->getEndTime(&tempSettings[ENDHOUR], &tempSettings[ENDMINUTE]);
-
     currentPos = 0;
 
     if (lcd != nullptr) {
@@ -58,19 +57,19 @@ void SessionSetupMenu::middlePressHandler(Buzzer& buzzer)
 void SessionSetupMenu::rightPressHandler(Buzzer& buzzer)
 {
     buzzer.buzz(2, 150);
-    LightingSession* selectedSession = ui.getSelectedSession();
+    LightingSession* selectedSession = ui.sessions.getSelected();
     selectedSession->setActive(bool(tempSettings[ACTIVITY]));
     selectedSession->setLightThreshold(tempSettings[THRESHOLD]);
     selectedSession->setStartTime(tempSettings[STARTHOUR], tempSettings[STARTMINUTE]);
     selectedSession->setEndTime(tempSettings[ENDHOUR], tempSettings[ENDMINUTE]);
 
     if (++currentPos >= NUM_OF_SETTINGS) {
-        selectedSession->saveToEeprom();
+        selectedSession->saveToEeprom();  // TODO
         ui.setMenu(ui.getMainMenu());
     }
 }
 
-void SessionSetupMenu::updateDisplay(LiquidCrystal* lcd, uint8_t lightLevel)
+void SessionSetupMenu::updateDisplay(LiquidCrystal* lcd)
 {
     if (lcd == nullptr)
         return;

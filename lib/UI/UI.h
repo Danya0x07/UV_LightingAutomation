@@ -3,7 +3,7 @@
 #include <Arduino.h>
 
 #include <HardwareManager.h>
-#include <LightingSession.h>
+#include <SessionManager.h>
 
 class UserInterface;
 
@@ -23,7 +23,7 @@ public:
     virtual void leftPressHandler(Buzzer&) = 0;
     virtual void middlePressHandler(Buzzer&) = 0;
     virtual void rightPressHandler(Buzzer&) = 0;
-    virtual void updateDisplay(LiquidCrystal*, uint8_t lightLevel) = 0;
+    virtual void updateDisplay(LiquidCrystal*) = 0;
 };
 
 /**
@@ -39,7 +39,7 @@ public:
     void leftPressHandler(Buzzer&) override;
     void middlePressHandler(Buzzer&) override;
     void rightPressHandler(Buzzer&) override;
-    void updateDisplay(LiquidCrystal*, uint8_t lightLevel) override;
+    void updateDisplay(LiquidCrystal*) override;
 };
 
 /** Меню выбора настроек (что собираемся настраивать). */
@@ -60,7 +60,7 @@ public:
     void leftPressHandler(Buzzer&) override;
     void middlePressHandler(Buzzer&) override;
     void rightPressHandler(Buzzer&) override;
-    void updateDisplay(LiquidCrystal*, uint8_t lightLevel) override;
+    void updateDisplay(LiquidCrystal*) override;
 };
 
 /** Меню настройки часов. */
@@ -83,7 +83,7 @@ public:
     void leftPressHandler(Buzzer&) override;
     void middlePressHandler(Buzzer&) override;
     void rightPressHandler(Buzzer&) override;
-    void updateDisplay(LiquidCrystal*, uint8_t lightLevel) override;
+    void updateDisplay(LiquidCrystal*) override;
 };
 
 /** Меню выбора сеанса досветки для последующей настройки. */
@@ -104,7 +104,7 @@ public:
     void leftPressHandler(Buzzer&) override;
     void middlePressHandler(Buzzer&) override;
     void rightPressHandler(Buzzer&) override;
-    void updateDisplay(LiquidCrystal*, uint8_t lightLevel) override;
+    void updateDisplay(LiquidCrystal*) override;
 };
 
 /** Меню настройки сеанса досветки. */
@@ -130,13 +130,13 @@ public:
     void leftPressHandler(Buzzer&) override;
     void middlePressHandler(Buzzer&) override;
     void rightPressHandler(Buzzer&) override;
-    void updateDisplay(LiquidCrystal*, uint8_t lightLevel) override;
+    void updateDisplay(LiquidCrystal*) override;
 };
 
 /**
  * Представление пользовательского интерфейса в виде конечного автомата,
  * в котором состояниями являются различные меню.
- * Одновременно является посредником меню для доступа к компонентам системы.
+ * Предоставляет возможность меню взаимодействовать с компонентами системы.
  */
 class UserInterface
 {
@@ -148,15 +148,11 @@ private:
     SessionSetupMenu sessionSetupMenu;
     Menu* currentMenu;
 
-    HardwareManager& hardwareManager;
-
-    LightingSession* const morningSession;
-    LightingSession* const eveningSession;
-    LightingSession* selectedSession;
-
 public:
-    explicit UserInterface(HardwareManager& hwm,
-                           LightingSession*, LightingSession*);
+    HardwareManager& hardware;
+    SessionManager& sessions;
+
+    explicit UserInterface(HardwareManager& hardware_, SessionManager& sessions_);
 
     Menu* getMainMenu() { return &mainMenu; }
     Menu* getSettingSelectMenu() { return &settingSelectMenu; }
@@ -168,16 +164,9 @@ public:
     Menu* getMenu() { return currentMenu; }
 #endif
 
-    HardwareManager& getHardware() { return hardwareManager; }
-
-    LightingSession* getMorningSession() { return morningSession; }
-    LightingSession* getEveningSession() { return eveningSession; }
-    LightingSession* getSelectedSession() { return selectedSession; }
-    void setSelectedSession(LightingSession*);
-
     void onLeftPress();
     void onMiddlePress();
     void onRightPress();
-    void updateDisplay(uint8_t lightLevel);
+    void updateDisplay();
     void resetMenu();
 };

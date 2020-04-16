@@ -1,4 +1,4 @@
-#include <UI.h>
+#include "UI.h"
 
 void SessionSelectMenu::initalize(LiquidCrystal* lcd)
 {
@@ -34,16 +34,16 @@ void SessionSelectMenu::rightPressHandler(Buzzer& buzzer)
     switch (currentItem)
     {
     case ITEM_MORNING:
-        ui.setSelectedSession(ui.getMorningSession());
+        ui.sessions.select(&ui.sessions.morning);
         break;
     case ITEM_EVENING:
-        ui.setSelectedSession(ui.getEveningSession());
+        ui.sessions.select(&ui.sessions.evening);
         break;
     }
     ui.setMenu(ui.getSessionSetupMenu());
 }
 
-void SessionSelectMenu::updateDisplay(LiquidCrystal* lcd, uint8_t lightLevel)
+void SessionSelectMenu::updateDisplay(LiquidCrystal* lcd)
 {
     if (lcd == nullptr)
         return;

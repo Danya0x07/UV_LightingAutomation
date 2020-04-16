@@ -16,6 +16,13 @@ private:
     LiquidCrystal* lcd;
 
 public:
+    enum PressEvent : uint8_t {
+        PRESS_LEFT   = 1 << 0,
+        PRESS_MIDDLE = 1 << 1,
+        PRESS_RIGHT  = 1 << 2,
+        PRESS_WAS = PRESS_LEFT | PRESS_MIDDLE | PRESS_RIGHT
+    };
+
     Button leftButton;
     Button middleButton;
     Button rightButton;
@@ -23,13 +30,6 @@ public:
     Buzzer buzzer;
     Clock clock;
     LightSensor lightSensor;
-
-    enum PressEvent : uint8_t {
-        PRESS_LEFT   = 1 << 0,
-        PRESS_MIDDLE = 1 << 1,
-        PRESS_RIGHT  = 1 << 2,
-        PRESS_WAS = PRESS_LEFT | PRESS_MIDDLE | PRESS_RIGHT
-    };
 
     HardwareManager();
     HardwareManager(const HardwareManager& copy) = delete;

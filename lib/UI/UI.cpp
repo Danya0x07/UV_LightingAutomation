@@ -1,18 +1,14 @@
-#include <UI.h>
+#include "UI.h"
 
-UserInterface::UserInterface(HardwareManager& hwm,
-                             LightingSession* morningSession_,
-                             LightingSession* eveningSession_)
+UserInterface::UserInterface(HardwareManager& hardware_, SessionManager& sessions_)
     : mainMenu(*this),
     settingSelectMenu(*this),
     clockSetupMenu(*this),
     sessionSelectMenu(*this),
     sessionSetupMenu(*this),
     currentMenu(&mainMenu),
-    hardwareManager(hwm),
-    morningSession(morningSession_),
-    eveningSession(eveningSession_),
-    selectedSession(morningSession_)
+    hardware(hardware_),
+    sessions(sessions_)
 {
     resetMenu();
 }
@@ -20,33 +16,27 @@ UserInterface::UserInterface(HardwareManager& hwm,
 void UserInterface::setMenu(Menu* menu)
 {
     currentMenu = menu;
-    menu->initalize(hardwareManager.getDisplay());
-}
-
-void UserInterface::setSelectedSession(LightingSession* session)
-{
-    if (session != nullptr)
-        selectedSession = session;
+    menu->initalize(hardware.getDisplay());
 }
 
 void UserInterface::onLeftPress()
 {
-    currentMenu->leftPressHandler(hardwareManager.buzzer);
+    currentMenu->leftPressHandler(hardware.buzzer);
 }
 
 void UserInterface::onMiddlePress()
 {
-    currentMenu->middlePressHandler(hardwareManager.buzzer);
+    currentMenu->middlePressHandler(hardware.buzzer);
 }
 
 void UserInterface::onRightPress()
 {
-    currentMenu->rightPressHandler(hardwareManager.buzzer);
+    currentMenu->rightPressHandler(hardware.buzzer);
 }
 
-void UserInterface::updateDisplay(uint8_t lightLevel)
+void UserInterface::updateDisplay()
 {
-    currentMenu->updateDisplay(hardwareManager.getDisplay(), lightLevel);
+    currentMenu->updateDisplay(hardware.getDisplay());
 }
 
 void UserInterface::resetMenu()

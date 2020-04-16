@@ -1,4 +1,4 @@
-#include <UI.h>
+#include "UI.h"
 
 void MainMenu::initalize(LiquidCrystal* lcd)
 {
@@ -19,7 +19,7 @@ void MainMenu::leftPressHandler(Buzzer& buzzer)
 void MainMenu::middlePressHandler(Buzzer& buzzer)
 {
     buzzer.buzz(2, 150);
-    ui.getHardware().relay.switchState();
+    ui.hardware.relay.switchState();
 }
 
 void MainMenu::rightPressHandler(Buzzer& buzzer)
@@ -28,15 +28,17 @@ void MainMenu::rightPressHandler(Buzzer& buzzer)
     ui.setMenu(ui.getSettingSelectMenu());
 }
 
-void MainMenu::updateDisplay(LiquidCrystal* lcd, uint8_t lightLevel)
+void MainMenu::updateDisplay(LiquidCrystal* lcd)
 {
-    DateTime dateTime = ui.getHardware().clock.getTime();
+    DateTime dateTime = ui.hardware.clock.getTime();
     uint8_t hour = dateTime.hour();
     uint8_t minute = dateTime.minute();
     uint8_t day = dateTime.day();
     uint8_t month = dateTime.month();
     uint8_t year = (dateTime.year() - 2000) % 100;
-    bool relayState = ui.getHardware().relay.getState();
+    uint8_t lightLevel = ui.hardware.getLightLevel();
+    bool relayState = ui.hardware.relay.getState();
+    uint8_t performedSessions = ui.sessions.getPerformedToday();
 
     if (lcd == nullptr)
         return;
@@ -81,5 +83,8 @@ void MainMenu::updateDisplay(LiquidCrystal* lcd, uint8_t lightLevel)
     lcd->setCursor(9, 1);
     lcd->print(relayState ? F("ON ") : F("OFF"));
 
-    // TODO: Добавить вывод прошедших сеансов.
+    /* Печатаем прошедшие сеансы. */
+    lcd->setCursor(14, 1);
+    lcd->print(performedSessions & SessionManager::SESSION_MORNING ? 'M' : ' ');
+    lcd->print(performedSessions & SessionManager::SESSION_EVENING ? 'E' : ' ');
 }

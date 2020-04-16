@@ -1,4 +1,4 @@
-#include <UI.h>
+#include "UI.h"
 
 void SettingSelectMenu::initalize(LiquidCrystal* lcd)
 {
@@ -42,7 +42,7 @@ void SettingSelectMenu::rightPressHandler(Buzzer& buzzer)
     }
 }
 
-void SettingSelectMenu::updateDisplay(LiquidCrystal* lcd, uint8_t lightLevel)
+void SettingSelectMenu::updateDisplay(LiquidCrystal* lcd)
 {
     if (lcd == nullptr)
         return;
