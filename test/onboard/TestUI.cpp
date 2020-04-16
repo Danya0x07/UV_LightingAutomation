@@ -1,12 +1,36 @@
 #include "test.h"
 
-LightingSession morningSession, eveningSession;
-UserInterface ui(hardware, &morningSession, &eveningSession);
+void testMenuTransitions()
+{
+    ui.resetMenu();  // переход в главное меню
+    TEST_ASSERT_TRUE(ui.getMenu() == ui.getMainMenu());
+
+    ui.resetMenu();
+    ui.onRightPress();  // переход в меню выбора настроек
+    TEST_ASSERT_TRUE(ui.getMenu() == ui.getSettingSelectMenu());
+
+    ui.resetMenu();
+    ui.onRightPress();  // переход в меню выбора настроек
+    ui.onRightPress();  // переход в меню выбора сеансов
+    TEST_ASSERT_TRUE(ui.getMenu() == ui.getSessionSelectMenu());
+
+    ui.resetMenu();
+    ui.onRightPress();  // переход в меню выбора настроек
+    ui.onRightPress();  // переход в меню выбора сеансов
+    ui.onRightPress();  // переход в меню настройки сеанса
+    TEST_ASSERT_TRUE(ui.getMenu() == ui.getSessionSetupMenu());
+
+    ui.resetMenu();
+    ui.onRightPress();   // переход в меню выбора настроек
+    ui.onMiddlePress();  // выбор пункта CLOCK
+    ui.onRightPress();   // переход в меню настройки часов
+    TEST_ASSERT_TRUE(ui.getMenu() == ui.getClockSetupMenu());
+}
 
 void testMainMenuUI()
 {
     hardware.relay.setState(0);
-    ui.resetMenu();
+    ui.setMenu(ui.getMainMenu());
 
     /*
      * Тестируем поведение главного меню.
@@ -40,10 +64,8 @@ void testSessionConfiguringUI()
      * Симулируя нажатия на кнопки, сделаем настройки вечернего сеанса
      * равными настройкам утреннего.
      */
-    ui.onRightPress();  // входим в меню выбора настроек
-    ui.onRightPress();  // входим в меню выбора сеансов досветки
-    ui.onMiddlePress();  // выбираем вечерний сеанс
-    ui.onRightPress();  // входим в меню настройки сеанса
+    ui.setSelectedSession(ui.getEveningSession());  // выбираем вечерний сеанс
+    ui.setMenu(ui.getSessionSetupMenu());  // входим в меню настройки сеанса
 
     /* Настраиваем активность. */
     ui.onLeftPress();  // переключаем параметр active вечернего сеанса с 0 на 1
@@ -78,6 +100,7 @@ void testSessionConfiguringUI()
     ui.onMiddlePress();  // уменьшаем минуту окончания с 21 до 20
     ui.onRightPress();  // подтверждаем и выходим в главное меню
     TEST_ASSERT_EQUAL(20, eveningSession.getEndTime().minute());
+    TEST_ASSERT_TRUE(ui.getMenu() == ui.getMainMenu());
 
     /* В итоге вечерний сеанс должен стать равным утреннему. */
     TEST_ASSERT_TRUE(eveningSession == morningSession);
@@ -101,9 +124,7 @@ void testClockConfiguringUI()
      * Симулируя нажатия на кнопки, установим время RTC,
      * равное target.
      */
-    ui.onRightPress();  // входим в меню выбора настроек
-    ui.onMiddlePress();  // выбираем пункт CLOCK
-    ui.onRightPress();  // входим в меню настройки часов
+    ui.setMenu(ui.getClockSetupMenu());  // входим в меню настройки часов
 
     /* Настраиваем час. */
     for (uint8_t i = 0; i < 22; i++)
@@ -120,7 +141,7 @@ void testClockConfiguringUI()
     /* Настраиваем год. */
     ui.onLeftPress();  // 18 + 1 == 19
     ui.onLeftPress();  // 19 + 1 == 20
-    ui.onRightPress();  // подтверждаем и выходим в главное меню
+    ui.onRightPress();  // подтверждаем и переходим к следующему параметру
     TEST_ASSERT_EQUAL(hardware.clock.getTime().year(), target.year());
 
     /* Настраиваем месяц. */
@@ -130,8 +151,9 @@ void testClockConfiguringUI()
 
     /* Настраиваем число. */
     ui.onMiddlePress();  // уменьшаем число с 7 до 6
-    ui.onRightPress();  // подтверждаем и переходим к следующему параметру
+    ui.onRightPress();  // подтверждаем и выходим в главное меню
     TEST_ASSERT_EQUAL(hardware.clock.getTime().day(), target.day());
+    TEST_ASSERT_TRUE(ui.getMenu() == ui.getMainMenu());
 
     /* В итоге время часов должно стать равным target. */
     TEST_ASSERT_TRUE(hardware.clock.getTime() == target);

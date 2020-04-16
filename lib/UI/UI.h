@@ -164,6 +164,9 @@ public:
     Menu* getSessionSelectMenu() { return &sessionSelectMenu; }
     Menu* getSessionSetupMenu() { return &sessionSetupMenu; }
     void setMenu(Menu*);
+#ifdef UNIT_TEST
+    Menu* getMenu() { return currentMenu; }
+#endif
 
     HardwareManager& getHardware() { return hardwareManager; }
 

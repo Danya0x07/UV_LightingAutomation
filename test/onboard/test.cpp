@@ -1,6 +1,8 @@
 #include "test.h"
 
 HardwareManager hardware;
+LightingSession morningSession, eveningSession;
+UserInterface ui(hardware, &morningSession, &eveningSession);
 
 void processTests()
 {
@@ -9,6 +11,7 @@ void processTests()
     RUN_TEST(testButtons);
     RUN_TEST(testClock);
     RUN_TEST(testLightingSession);
+    RUN_TEST(testMenuTransitions);
     RUN_TEST(testMainMenuUI);
     RUN_TEST(testSessionConfiguringUI);
     RUN_TEST(testClockConfiguringUI);
