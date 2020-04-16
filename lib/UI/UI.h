@@ -17,7 +17,7 @@ protected:
     UserInterface& ui;
 
 public:
-    explicit Menu(UserInterface& ui) : ui(ui) {}
+    explicit Menu(UserInterface& ui_) : ui(ui_) {}
 
     virtual void initalize(LiquidCrystal*) = 0;
     virtual void leftPressHandler(Buzzer&) = 0;
@@ -33,7 +33,7 @@ public:
 class MainMenu : public Menu
 {
 public:
-    explicit MainMenu(UserInterface& ui) : Menu(ui) {}
+    explicit MainMenu(UserInterface& ui_) : Menu(ui_) {}
 
     void initalize(LiquidCrystal*) override;
     void leftPressHandler(Buzzer&) override;
@@ -54,7 +54,7 @@ private:
     int8_t currentItem;
 
 public:
-    explicit SettingSelectMenu(UserInterface& ui) : Menu(ui), currentItem(0) {}
+    explicit SettingSelectMenu(UserInterface& ui_) : Menu(ui_), currentItem(0) {}
 
     void initalize(LiquidCrystal*) override;
     void leftPressHandler(Buzzer&) override;
@@ -77,7 +77,7 @@ private:
     static void validateDate(int8_t* day, int8_t month, int16_t year);
 
 public:
-    explicit ClockSetupMenu(UserInterface&);
+    explicit ClockSetupMenu(UserInterface& ui_);
 
     void initalize(LiquidCrystal*) override;
     void leftPressHandler(Buzzer&) override;
@@ -98,7 +98,7 @@ private:
     int8_t currentItem;
 
 public:
-    explicit SessionSelectMenu(UserInterface& ui) : Menu(ui), currentItem(0) {}
+    explicit SessionSelectMenu(UserInterface& ui_) : Menu(ui_), currentItem(0) {}
 
     void initalize(LiquidCrystal*) override;
     void leftPressHandler(Buzzer&) override;
@@ -124,7 +124,7 @@ private:
     uint8_t currentPos;
 
 public:
-    explicit SessionSetupMenu(UserInterface&);
+    explicit SessionSetupMenu(UserInterface& ui_);
 
     void initalize(LiquidCrystal*) override;
     void leftPressHandler(Buzzer&) override;

@@ -1,8 +1,8 @@
 #include <UI.h>
 
 UserInterface::UserInterface(HardwareManager& hwm,
-                             LightingSession* morningSession,
-                             LightingSession* eveningSession)
+                             LightingSession* morningSession_,
+                             LightingSession* eveningSession_)
     : mainMenu(*this),
     settingSelectMenu(*this),
     clockSetupMenu(*this),
@@ -10,9 +10,9 @@ UserInterface::UserInterface(HardwareManager& hwm,
     sessionSetupMenu(*this),
     currentMenu(&mainMenu),
     hardwareManager(hwm),
-    morningSession(morningSession),
-    eveningSession(eveningSession),
-    selectedSession(morningSession)
+    morningSession(morningSession_),
+    eveningSession(eveningSession_),
+    selectedSession(morningSession_)
 {
     resetMenu();
 }

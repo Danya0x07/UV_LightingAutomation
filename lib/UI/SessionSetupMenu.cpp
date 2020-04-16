@@ -10,8 +10,8 @@ const uint8_t SessionSetupMenu::settingsLcdColumns[NUM_OF_SETTINGS] = {
     4, 12, 2, 5, 10, 13
 };
 
-SessionSetupMenu::SessionSetupMenu(UserInterface& ui)
-    : Menu(ui), tempSettings{}, currentPos(0)
+SessionSetupMenu::SessionSetupMenu(UserInterface& ui_)
+    : Menu(ui_), tempSettings{}, currentPos(0)
 {
 
 }

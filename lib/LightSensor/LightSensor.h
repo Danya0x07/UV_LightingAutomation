@@ -13,6 +13,6 @@ private:
     const uint8_t pin;
 
 public:
-    explicit LightSensor(uint8_t pin): pin(pin) {}
+    explicit LightSensor(uint8_t pin_): pin(pin_) {}
     uint16_t getValue(uint16_t limit);
 };

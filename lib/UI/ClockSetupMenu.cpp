@@ -25,8 +25,8 @@ const uint8_t ClockSetupMenu::settingsLcdColumns[NUM_OF_SETTINGS] = {
     1, 4, 14, 11, 8
 };
 
-ClockSetupMenu::ClockSetupMenu(UserInterface& ui)
-    : Menu(ui), tempSettings{}, currentPos(0)
+ClockSetupMenu::ClockSetupMenu(UserInterface& ui_)
+    : Menu(ui_), tempSettings{}, currentPos(0)
 {
 
 }
