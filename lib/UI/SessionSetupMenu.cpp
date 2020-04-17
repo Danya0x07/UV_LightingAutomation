@@ -62,7 +62,7 @@ void SessionSetupMenu::rightPressHandler()
     selectedSession->setStartTime(tempSettings[STARTHOUR], tempSettings[STARTMINUTE]);
     selectedSession->setEndTime(tempSettings[ENDHOUR], tempSettings[ENDMINUTE]);
 
-    if (++currentPos >= NUM_OF_SETTINGS) {
+    if (++currentPos >= NUM_OF_SETTINGS || tempSettings[ACTIVITY] == 0) {
         ui.makeSound(UserInterface::MENU_TRANSITION);
         ui.sessions.save();
         ui.setMenu(ui.getMainMenu());

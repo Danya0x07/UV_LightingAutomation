@@ -102,6 +102,17 @@ void testSessionConfiguringUI()
 
     /* В итоге вечерний сеанс должен стать равным утреннему. */
     TEST_ASSERT_TRUE(sessions.evening == sessions.morning);
+
+    /*
+     * Проверяем возможность преждевременного выхода из меню настройки сеанса,
+     * в случае, если пользователь установил активность сеанса равной 0.
+     */
+    sessions.morning.setActive(true);  // предыдущие манипуляции могли что-нибудь поменять
+    sessions.select(&sessions.morning);  // выбираем утренний сеанс
+    ui.setMenu(ui.getSessionSetupMenu());  // входим в меню настройки сеанса
+    ui.onMiddlePress();  // переключаем параметр active утреннего сеанса с 1 на 0
+    ui.onRightPress();  // подтверждаем и выходим в главное меню
+    TEST_ASSERT_TRUE(ui.getMenu() == ui.getMainMenu());
 }
 
 void testClockConfiguringUI()
