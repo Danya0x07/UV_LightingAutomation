@@ -36,7 +36,7 @@ void ClockSetupMenu::initalize(LiquidCrystal* lcd)
     DateTime settings = ui.hardware.clock.getTime();
     tempSettings[HOUR]   = settings.hour();
     tempSettings[MINUTE] = settings.minute();
-    tempSettings[YEAR]   = settings.year();
+    tempSettings[YEAR]   = uint8_t(settings.year() - 2000);
     tempSettings[MONTH]  = settings.month();
     tempSettings[DAY]    = settings.day();
     currentPos = 0;
