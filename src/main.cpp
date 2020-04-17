@@ -23,6 +23,10 @@ void disableUI(TimerHandle_t unused);
 
 void setup()
 {
+    hardware.createDisplay();
+    hardware.enableDisplay();
+    ui.resetMenu();
+
     xTaskCreate(checkButtonsTask, "chbtns", 128,
                 NULL, 1, NULL);
 
@@ -32,7 +36,7 @@ void setup()
     xTaskCreate(updateDisplayTask, "updisp", 128,
                 NULL, 1, &updateDisplayTaskHandle);
 
-    disableUiTimerHandle = xTimerCreate("uidis", pdMS_TO_TICKS(7000),
+    disableUiTimerHandle = xTimerCreate("uidis", pdMS_TO_TICKS(10000),
                                         pdFALSE, NULL, disableUI);
 
     xTimerStart(disableUiTimerHandle, 100);
@@ -99,7 +103,7 @@ void updateDisplayTask(void* unused)
 {
     for (;;) {
         ui.updateDisplay();
-        vTaskDelay(pdMS_TO_TICKS(500));
+        vTaskDelay(pdMS_TO_TICKS(333));
     }
 }
 

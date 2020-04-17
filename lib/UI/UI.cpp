@@ -10,13 +10,12 @@ UserInterface::UserInterface(HardwareManager& hardware_, SessionManager& session
     hardware(hardware_),
     sessions(sessions_)
 {
-    resetMenu();
 }
 
 void UserInterface::setMenu(Menu* menu)
 {
-    currentMenu = menu;
     menu->initalize(hardware.getDisplay());
+    currentMenu = menu;
 }
 
 void UserInterface::makeSound(Sound sound)
@@ -24,7 +23,7 @@ void UserInterface::makeSound(Sound sound)
     switch (sound)
     {
     case DISPLAY_AWAKE:   hardware.buzzer.buzz(1, 150); break;
-    case CHANGE_VALUE:    hardware.buzzer.buzz(1, 100); break;
+    case CHANGE_VALUE:    hardware.buzzer.buzz(1, 80); break;
     case CONFIRM_VALUE:   hardware.buzzer.buzz(1, 200); break;
     case MENU_TRANSITION: hardware.buzzer.buzz(2, 100); break;
     }

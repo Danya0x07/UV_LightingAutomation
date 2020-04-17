@@ -205,7 +205,6 @@ public:
     void setMenu(Menu*);
 
     void makeSound(Sound);
-
     void onLeftPress();
     void onMiddlePress();
     void onRightPress();

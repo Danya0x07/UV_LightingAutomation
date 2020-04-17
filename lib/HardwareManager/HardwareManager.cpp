@@ -10,11 +10,6 @@ HardwareManager::HardwareManager()
     clock(A3, A2),
     lightSensor(A6)
 {
-#ifndef UNIT_TEST  // Прогон тестов не предполагает наличие дисплея.
-    lcd = new LiquidCrystal(2, 3, 4, 5, 6, 7);
-    lcd->setBacklightPin(12, POSITIVE);
-    lcd->begin(16, 2);
-#endif
 }
 
 uint8_t HardwareManager::getPressEvents()
@@ -37,9 +32,16 @@ uint16_t HardwareManager::getLightLevel()
     return lightSensor.getValue(100);
 }
 
+void HardwareManager::createDisplay()
+{
+    lcd = new LiquidCrystal(2, 3, 4, 5, 6, 7);
+    lcd->begin(16, 2);
+    lcd->setBacklightPin(12, POSITIVE);
+}
+
 void HardwareManager::enableDisplay()
 {
-    if (lcd != nullptr){
+    if (lcd != nullptr) {
         lcd->backlight();
         lcd->display();
     }
@@ -47,7 +49,7 @@ void HardwareManager::enableDisplay()
 
 void HardwareManager::disableDisplay()
 {
-    if (lcd != nullptr){
+    if (lcd != nullptr) {
         lcd->noDisplay();
         lcd->noBacklight();
     }
