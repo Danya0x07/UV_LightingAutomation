@@ -6,17 +6,17 @@
 Button::Button(uint8_t pin_, bool inverted_) : DigitalOnePinDevice(pin_, inverted_)
 {
     pinMode(pin, inverted_ ? INPUT_PULLUP : INPUT);
-    lastState = isPressed();
+    lastState = digitalRead(pin);
 }
 
 bool Button::hasBeenPressed()
 {
     bool pressed = false;
-    bool currentState = isPressed();
+    bool currentState = digitalRead(pin);
 
     if (lastState != currentState) {
         delay(DEBOUNCE_DURATION_MS);
-        currentState = isPressed();
+        currentState = digitalRead(pin);
     }
 
     if (lastState && !currentState) pressed = inverted;
