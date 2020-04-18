@@ -1,6 +1,8 @@
 ## Программное обеспечение автоматической системы ультрафиолетового освещения теплицы.
+
 [![Build Status](https://travis-ci.org/Danya0x07/UV_LightingAutomation.svg?branch=master)](https://travis-ci.org/Danya0x07/UV_LightingAutomation)
-<img src="./img1.jpg" width="400"> <img src="./img2.jpg" width="400">
+
+<img src="./img1.jpg" width="400"><img src="./img2.jpg" width="400">
 
 **Компоненты системы**:
 - Arduino Nano;
