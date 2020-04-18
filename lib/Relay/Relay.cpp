@@ -15,6 +15,6 @@ Relay::Relay(uint8_t pin_, bool inverted_) : DigitalOnePinDevice(pin_, inverted_
 
 void Relay::setState(bool state)
 {
-    setLogicLevel(state);
+    DigitalOnePinDevice::setState(state);
     digitalWrite(A0, state);
 }

@@ -20,7 +20,7 @@ public:
     explicit Button(uint8_t pin_, bool inverted_);
 
     /** Возвращает true, если кнопка зажата в данный момент, иначе false. */
-    bool isPressed() { return getLogicLevel(); }
+    bool isPressed() { return getState(); }
 
     /**
      * Возвращает true, если кнопка была переведена из ненажатого состояния в нажатое.

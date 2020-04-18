@@ -23,11 +23,13 @@ public:
     DigitalOnePinDevice(uint8_t pin_, bool inverted_)
         : pin(pin_), inverted(inverted_) {}
 
-    void setLogicLevel(bool logicLevel) {
-        digitalWrite(pin, logicLevel != inverted);
+    /** Устанавливает логическое состояние на пине с учётом инверсности. */
+    void setState(bool state) {
+        digitalWrite(pin, state != inverted);
     }
 
-    bool getLogicLevel() {
+    /** Возвращает логическое состояние на пине с учётом инверсности. */
+    bool getState() {
         return bool(digitalRead(pin)) != inverted;
     }
 };
