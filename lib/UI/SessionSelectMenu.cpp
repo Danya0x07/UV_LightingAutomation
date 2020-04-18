@@ -16,16 +16,18 @@ void SessionSelectMenu::initalize(LiquidCrystal* lcd)
 
 void SessionSelectMenu::leftPressHandler()
 {
-    ui.makeSound(UserInterface::CHANGE_VALUE);
     if (--currentItem < 0)
         currentItem = 0;
+    else
+        ui.makeSound(UserInterface::CHANGE_VALUE);
 }
 
 void SessionSelectMenu::middlePressHandler()
 {
-    ui.makeSound(UserInterface::CHANGE_VALUE);
     if (++currentItem >= NUM_OF_ITEMS)
         currentItem = NUM_OF_ITEMS - 1;
+    else
+        ui.makeSound(UserInterface::CHANGE_VALUE);
 }
 
 void SessionSelectMenu::rightPressHandler()

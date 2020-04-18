@@ -24,7 +24,7 @@ void MainMenu::middlePressHandler()
 
 void MainMenu::rightPressHandler()
 {
-    ui.makeSound(UserInterface::DISPLAY_AWAKE);
+    ui.makeSound(UserInterface::MENU_TRANSITION);
     ui.setMenu(ui.getSettingSelectMenu());
 }
 

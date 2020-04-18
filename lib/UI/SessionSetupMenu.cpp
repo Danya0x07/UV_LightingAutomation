@@ -27,7 +27,7 @@ void SessionSetupMenu::initalize(LiquidCrystal* lcd)
 
     if (lcd != nullptr) {
         lcd->setCursor(0, 0);
-        lcd->print(F("  A:      L:   %"));
+        lcd->print(F("  A:      L:    "));
         lcd->setCursor(0, 1);
         lcd->print(F("S:  :   E:  :   "));
         lcd->blink();
@@ -80,6 +80,7 @@ void SessionSetupMenu::updateDisplay(LiquidCrystal* lcd)
         lcd->setCursor(settingsLcdColumns[i], settingsLcdRows[i]);
         if (i == THRESHOLD) {
             lcd->print(tempSettings[i]);
+            lcd->print('%');
             if (tempSettings[i] < 100)
                 lcd->print(' ');
             if (tempSettings[i] < 10)
