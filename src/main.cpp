@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <avr/sleep.h>
 
 #include <Arduino_FreeRTOS.h>
 #include <timers.h>
@@ -42,9 +43,10 @@ void setup()
     xTimerStart(disableUiTimerHandle, 100);
 }
 
-void loop()
+void loop()  // вызывается во время простоя
 {
-    // TODO: Добавить вход в режим сна.
+    set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+    sleep_mode();
 }
 
 void checkButtonsTask(void* unused)
@@ -68,7 +70,7 @@ void checkButtonsTask(void* unused)
             ui.onRightPress();
         }
 
-        vTaskDelay(pdMS_TO_TICKS(50));
+        vTaskDelay(pdMS_TO_TICKS(100));
     }
 }
 
