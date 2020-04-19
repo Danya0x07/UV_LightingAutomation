@@ -13,17 +13,25 @@ void setUpTestSession()
 void testSessionUnderwayDetection()
 {
     /* Проверяем рамки яркости. */
-    TEST_ASSERT_TRUE(lightingSession.hasToBeUnderway(DateTime(0, 0, 0, 7, 59, 0), 33));
     TEST_ASSERT_FALSE(lightingSession.hasToBeUnderway(DateTime(0, 0, 0, 7, 59, 0), 34));
+    TEST_ASSERT_TRUE(lightingSession.hasToBeUnderway(DateTime(0, 0, 0, 7, 59, 0), 33));
+
+    /*
+     * Проверяем, что однажды достигнув светового порога, уровень освещённости
+     * не влияет на дальнейшее прохождение сеанса, то есть сеанс идёт
+     * до своего временного конца.
+     */
+    TEST_ASSERT_TRUE(lightingSession.hasToBeUnderway(DateTime(0, 0, 0, 8, 0, 0), 100));
+
+    /* Проверяем временные рамки. */
+    TEST_ASSERT_FALSE(lightingSession.hasToBeUnderway(DateTime(0, 0, 0, 9, 1, 0), 20));
+    TEST_ASSERT_FALSE(lightingSession.hasToBeUnderway(DateTime(0, 0, 0, 6, 29, 0), 20));
 
     /* Проверяем активность/неактивность. */
     lightingSession.setActive(false);
     TEST_ASSERT_FALSE(lightingSession.hasToBeUnderway(DateTime(0, 0, 0, 7, 59, 0), 20));
     lightingSession.setActive(true);
-
-    /* Проверяем временные рамки. */
-    TEST_ASSERT_FALSE(lightingSession.hasToBeUnderway(DateTime(0, 0, 0, 6, 29, 0), 20));
-    TEST_ASSERT_FALSE(lightingSession.hasToBeUnderway(DateTime(0, 0, 0, 9, 1, 0), 20));
+    TEST_ASSERT_TRUE(lightingSession.hasToBeUnderway(DateTime(0, 0, 0, 7, 59, 0), 20));
 }
 
 void testSessionSavingLoading()

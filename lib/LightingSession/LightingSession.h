@@ -12,6 +12,9 @@
 class LightingSession
 {
 protected:
+    bool thresholdReached;
+
+    /* Часть, которая сохраняется в EEPROM. */
     bool isActive;
     uint8_t lightThreshold;
     DateTime startTime;

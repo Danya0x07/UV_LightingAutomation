@@ -2,7 +2,8 @@
 #include <EEPROM.h>
 
 LightingSession::LightingSession()
-    : isActive(false), lightThreshold(0), startTime(0), endTime(0)
+    : thresholdReached(false), isActive(false),
+    lightThreshold(0), startTime(0), endTime(0)
 {
 }
 
@@ -39,8 +40,19 @@ void LightingSession::saveToEeprom(uint16_t address)
 bool LightingSession::hasToBeUnderway(const DateTime& currentTime, uint8_t lightLevel)
 {
     DateTime relativeTime = DateTime(0, 0, 0, currentTime.hour(), currentTime.minute(), 0);
-    return isActive && (lightLevel <= lightThreshold) &&
-           (relativeTime >= startTime) && (relativeTime < endTime);
+    bool timeIsInSessionBounds = relativeTime >= startTime && relativeTime < endTime;
+
+    /*
+     * Если после начала сеанса порог освещённости был достигнут,
+     * то далее сеанс продолжается до своего временного конца,
+     * даже если освещённость будет выше порога. Иначе будет эффект дребезга.
+     */
+    if (lightLevel <= lightThreshold)
+        thresholdReached = true;
+    if (!timeIsInSessionBounds)
+        thresholdReached = false;
+
+    return isActive && timeIsInSessionBounds && thresholdReached;
 }
 
 void LightingSession::setLightThreshold(uint8_t threshold)
