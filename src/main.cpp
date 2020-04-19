@@ -53,8 +53,7 @@ void checkButtonsTask(void* unused)
 {
     uint8_t events = 0;
 
-    for (;;)
-    {
+    for (;;) {
         events = hardware.getPressEvents();
 
         if (events != 0) {
