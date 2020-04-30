@@ -12,5 +12,5 @@ install:
     - platformio update
 
 script:
-    - platformio remote -a rpi3bp run
-    - platformio remote -a rpi3bp test
+    - platformio run -e devboard -e productionboard
+    - platformio test -e devboard -e productionboard --without-uploading --without-testing
