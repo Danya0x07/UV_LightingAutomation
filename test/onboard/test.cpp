@@ -22,7 +22,6 @@ void processTests()
 
 void setup()
 {
-    setUpTestSession();
     processTests();
 }
 

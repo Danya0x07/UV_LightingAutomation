@@ -1,41 +1,59 @@
 #include "test.h"
 
-LightingSession lightingSession(LightingSession::ON_LIGHT_DECREASING);
-
-void setUpTestSession()
-{
-    lightingSession.setActive(true);
-    lightingSession.setLightThreshold(33);
-    lightingSession.setStartTime(6, 30);
-    lightingSession.setEndTime(9, 0);
-}
-
 void testSessionUnderwayDetection()
 {
+    LightingSession incLightingSession(LightingSession::ON_LIGHT_INCREASING);
+    LightingSession decLightingSession(LightingSession::ON_LIGHT_DECREASING);
+
+    incLightingSession.setActive(true);
+    incLightingSession.setLightThreshold(33);
+    incLightingSession.setStartTime(6, 30);
+    incLightingSession.setEndTime(9, 0);
+
+    decLightingSession.setActive(true);
+    decLightingSession.setLightThreshold(33);
+    decLightingSession.setStartTime(6, 30);
+    decLightingSession.setEndTime(9, 0);
+
     /* Проверяем рамки яркости. */
-    TEST_ASSERT_FALSE(lightingSession.hasToBeUnderway(DateTime(0, 0, 0, 7, 59, 0), 34));
-    TEST_ASSERT_TRUE(lightingSession.hasToBeUnderway(DateTime(0, 0, 0, 7, 59, 0), 33));
+    TEST_ASSERT_TRUE(incLightingSession.hasToBeUnderway(DateTime(0, 0, 0, 7, 59, 0), 32));
+    TEST_ASSERT_FALSE(incLightingSession.hasToBeUnderway(DateTime(0, 0, 0, 7, 59, 0), 33));
+    TEST_ASSERT_FALSE(decLightingSession.hasToBeUnderway(DateTime(0, 0, 0, 7, 59, 0), 34));
+    TEST_ASSERT_TRUE(decLightingSession.hasToBeUnderway(DateTime(0, 0, 0, 7, 59, 0), 33));
 
     /*
      * Проверяем, что однажды достигнув светового порога, уровень освещённости
-     * не влияет на дальнейшее прохождение сеанса, то есть сеанс идёт
-     * до своего временного конца.
+     * не влияет на дальнейшее прохождение сеанса.
      */
-    TEST_ASSERT_TRUE(lightingSession.hasToBeUnderway(DateTime(0, 0, 0, 8, 0, 0), 100));
+    TEST_ASSERT_FALSE(incLightingSession.hasToBeUnderway(DateTime(0, 0, 0, 8, 0, 0), 0));
+    TEST_ASSERT_TRUE(decLightingSession.hasToBeUnderway(DateTime(0, 0, 0, 8, 0, 0), 100));
 
     /* Проверяем временные рамки. */
-    TEST_ASSERT_FALSE(lightingSession.hasToBeUnderway(DateTime(0, 0, 0, 9, 1, 0), 20));
-    TEST_ASSERT_FALSE(lightingSession.hasToBeUnderway(DateTime(0, 0, 0, 6, 29, 0), 20));
+    TEST_ASSERT_FALSE(incLightingSession.hasToBeUnderway(DateTime(0, 0, 0, 9, 1, 0), 20));
+    TEST_ASSERT_FALSE(incLightingSession.hasToBeUnderway(DateTime(0, 0, 0, 6, 29, 0), 20));
+    TEST_ASSERT_FALSE(decLightingSession.hasToBeUnderway(DateTime(0, 0, 0, 9, 1, 0), 20));
+    TEST_ASSERT_FALSE(decLightingSession.hasToBeUnderway(DateTime(0, 0, 0, 6, 29, 0), 20));
 
-    /* Проверяем активность/неактивность. */
-    lightingSession.setActive(false);
-    TEST_ASSERT_FALSE(lightingSession.hasToBeUnderway(DateTime(0, 0, 0, 7, 59, 0), 20));
-    lightingSession.setActive(true);
-    TEST_ASSERT_TRUE(lightingSession.hasToBeUnderway(DateTime(0, 0, 0, 7, 59, 0), 20));
+    /*
+     * Проверяем активность/неактивность.
+     * Достаточно проверить для одного сеанса.
+     */
+    decLightingSession.setActive(false);
+    TEST_ASSERT_FALSE(decLightingSession.hasToBeUnderway(DateTime(0, 0, 0, 7, 59, 0), 20));
+    decLightingSession.setActive(true);
+    TEST_ASSERT_TRUE(decLightingSession.hasToBeUnderway(DateTime(0, 0, 0, 7, 59, 0), 20));
 }
 
 void testSessionSavingLoading()
 {
+    LightingSession lightingSession(LightingSession::ON_LIGHT_DECREASING);
+    LightingSession otherLightingSession(LightingSession::ON_LIGHT_DECREASING);
+
+    lightingSession.setActive(true);
+    lightingSession.setLightThreshold(33);
+    lightingSession.setStartTime(6, 30);
+    lightingSession.setEndTime(9, 0);
+
     /*
      * Проверяем корректность сохранения данных о сеансе в EEPROM.
      * для этого сохраняем сеанс по определённому адресу, а потом
@@ -47,7 +65,6 @@ void testSessionSavingLoading()
     uint16_t address = 100;
     lightingSession.saveToEeprom(address);
     lightingSession.saveToEeprom(address + LightingSession::getActualEepromPayloadSize());
-    LightingSession otherLightingSession(LightingSession::ON_LIGHT_INCREASING);
     otherLightingSession.loadFromEeprom(address);
     TEST_ASSERT_TRUE(otherLightingSession == lightingSession);
 }

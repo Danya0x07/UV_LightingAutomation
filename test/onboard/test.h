@@ -11,8 +11,6 @@ extern HardwareManager hardware;
 extern SessionManager sessions;
 extern UserInterface ui;
 
-void setUpTestSession();
-
 void testRelay();
 void testButtons();
 void testClock();

@@ -12,5 +12,6 @@ install:
     - platformio update
 
 script:
+    - platformio check
     - platformio run -e devboard -e productionboard
     - platformio test -e devboard -e productionboard --without-uploading --without-testing
