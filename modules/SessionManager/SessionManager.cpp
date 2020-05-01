@@ -3,8 +3,8 @@
 #define STARTADDR   0
 
 SessionManager::SessionManager()
-    : morning(LightingSession::ON_INCREASING),
-    evening(LightingSession::ON_DECREASING),
+    : morning(LightingSession::ON_LIGHT_INCREASING),
+    evening(LightingSession::ON_LIGHT_DECREASING),
     selected(&morning), performedToday(0)
 {
     morning.loadFromEeprom(STARTADDR + 0 * LightingSession::getActualEepromPayloadSize());

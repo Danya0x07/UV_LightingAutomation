@@ -18,8 +18,8 @@ public:
      * (Вечером освещённость уменьшается, утром - увеличивается.)
      */
     enum LightTrigger: uint8_t {
-        ON_INCREASING,
-        ON_DECREASING
+        ON_LIGHT_INCREASING,
+        ON_LIGHT_DECREASING
     };
 
     explicit LightingSession(LightTrigger);
