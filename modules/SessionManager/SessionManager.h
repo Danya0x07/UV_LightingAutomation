@@ -7,10 +7,6 @@
 /** Фасад для сеансов досветки. */
 class SessionManager
 {
-private:
-    LightingSession* selected;
-    uint8_t performedToday;
-
 public:
     LightingSession morning;
     LightingSession evening;
@@ -44,4 +40,8 @@ public:
 
     /** Сохраняет сеансы в энергонезависимую память. */
     void save();
+
+private:
+    LightingSession* selected;
+    uint8_t performedToday;
 };

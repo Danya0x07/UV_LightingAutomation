@@ -1,8 +1,8 @@
 #include "LightingSession.h"
 #include <EEPROM.h>
 
-LightingSession::LightingSession()
-    : thresholdReached(false), isActive(false),
+LightingSession::LightingSession(LightTrigger _trigger)
+    : trigger(_trigger), thresholdReached(false), isActive(false),
     lightThreshold(0), startTime(0), endTime(0)
 {
 }

@@ -1,6 +1,6 @@
 #include "test.h"
 
-LightingSession lightingSession;
+LightingSession lightingSession(LightingSession::ON_DECREASING);
 
 void setUpTestSession()
 {
@@ -47,7 +47,7 @@ void testSessionSavingLoading()
     uint16_t address = 100;
     lightingSession.saveToEeprom(address);
     lightingSession.saveToEeprom(address + LightingSession::getActualEepromPayloadSize());
-    LightingSession otherLightingSession;
+    LightingSession otherLightingSession(LightingSession::ON_INCREASING);
     otherLightingSession.loadFromEeprom(address);
     TEST_ASSERT_TRUE(otherLightingSession == lightingSession);
 }

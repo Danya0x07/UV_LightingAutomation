@@ -2,7 +2,10 @@
 
 #define STARTADDR   0
 
-SessionManager::SessionManager() : selected(&morning), performedToday(0)
+SessionManager::SessionManager()
+    : morning(LightingSession::ON_INCREASING),
+    evening(LightingSession::ON_DECREASING),
+    selected(&morning), performedToday(0)
 {
     morning.loadFromEeprom(STARTADDR + 0 * LightingSession::getActualEepromPayloadSize());
     evening.loadFromEeprom(STARTADDR + 1 * LightingSession::getActualEepromPayloadSize());

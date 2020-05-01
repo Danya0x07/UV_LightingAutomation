@@ -11,23 +11,24 @@
  */
 class LightingSession
 {
-protected:
-    bool thresholdReached;
-
-    /* Часть, которая сохраняется в EEPROM. */
-    bool isActive;
-    uint8_t lightThreshold;
-    DateTime startTime;
-    DateTime endTime;
-
 public:
-    explicit LightingSession();
+    /**
+     * Переход через порог освещённости, означающий начало сеанса.
+     * Может быть или "снизу вверх", или "сверху вниз".
+     * (Вечером освещённость уменьшается, утром - увеличивается.)
+     */
+    enum LightTrigger: uint8_t {
+        ON_INCREASING,
+        ON_DECREASING
+    };
+
+    explicit LightingSession(LightTrigger);
 
     void loadFromEeprom(uint16_t address);
     void saveToEeprom(uint16_t address);
     bool hasToBeUnderway(const DateTime& currentTime, uint8_t lightLevel);
 
-    void setActive(bool active) {isActive = active;}
+    void setActive(bool active) { isActive = active; }
     void setLightThreshold(uint8_t);
     void setStartTime(uint8_t hour, uint8_t minute);
     void setEndTime(uint8_t hour, uint8_t minute);
@@ -43,4 +44,14 @@ public:
     bool operator!=(const LightingSession&);
 
     static uint8_t getActualEepromPayloadSize() { return 6; }
+
+protected:
+    const LightTrigger trigger;
+    bool thresholdReached;
+
+    /* Часть, которая сохраняется в EEPROM. */
+    bool isActive;
+    uint8_t lightThreshold;
+    DateTime startTime;
+    DateTime endTime;
 };
