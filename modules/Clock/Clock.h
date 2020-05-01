@@ -10,11 +10,11 @@
  */
 class Clock
 {
-private:
-    RTC_DS1307 rtc;
-
 public:
     explicit Clock(uint8_t powerPin, uint8_t groundPin);
     DateTime getTime();
     void setTime(const DateTime&);
+
+private:
+    RTC_DS1307 rtc;
 };

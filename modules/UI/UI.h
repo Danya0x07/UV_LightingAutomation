@@ -13,9 +13,6 @@ class UserInterface;
  */
 class Menu
 {
-protected:
-    UserInterface& ui;
-
 public:
     explicit Menu(UserInterface& ui_) : ui(ui_) {}
 
@@ -24,6 +21,9 @@ public:
     virtual void middlePressHandler() = 0;
     virtual void rightPressHandler() = 0;
     virtual void updateDisplay(LiquidCrystal*) = 0;
+
+protected:
+    UserInterface& ui;
 };
 
 /**
@@ -57,14 +57,6 @@ public:
  */
 class SettingSelectMenu : public Menu
 {
-private:
-    enum : int8_t {
-        ITEM_SESSIONS = 0,
-        ITEM_CLOCK,
-        NUM_OF_ITEMS
-    };
-    int8_t currentItem;
-
 public:
     explicit SettingSelectMenu(UserInterface& ui_) : Menu(ui_), currentItem(0) {}
 
@@ -73,6 +65,14 @@ public:
     void middlePressHandler() override;
     void rightPressHandler() override;
     void updateDisplay(LiquidCrystal*) override;
+
+private:
+    enum : int8_t {
+        ITEM_SESSIONS = 0,
+        ITEM_CLOCK,
+        NUM_OF_ITEMS
+    };
+    int8_t currentItem;
 };
 
 /**
@@ -85,6 +85,15 @@ public:
  */
 class ClockSetupMenu : public Menu
 {
+public:
+    explicit ClockSetupMenu(UserInterface& ui_);
+
+    void initalize(LiquidCrystal*) override;
+    void leftPressHandler() override;
+    void middlePressHandler() override;
+    void rightPressHandler() override;
+    void updateDisplay(LiquidCrystal*) override;
+
 private:
     enum Settings : uint8_t {HOUR, MINUTE, YEAR, MONTH, DAY, NUM_OF_SETTINGS};
     static const int8_t minSettingsBounds[NUM_OF_SETTINGS];
@@ -94,15 +103,6 @@ private:
     uint8_t currentPos;
 
     static void validateDate(int8_t* day, int8_t month, int16_t year);
-
-public:
-    explicit ClockSetupMenu(UserInterface& ui_);
-
-    void initalize(LiquidCrystal*) override;
-    void leftPressHandler() override;
-    void middlePressHandler() override;
-    void rightPressHandler() override;
-    void updateDisplay(LiquidCrystal*) override;
 };
 
 /**
@@ -115,14 +115,6 @@ public:
  */
 class SessionSelectMenu : public Menu
 {
-private:
-    enum : int8_t {
-        ITEM_MORNING = 0,
-        ITEM_EVENING,
-        NUM_OF_ITEMS
-    };
-    int8_t currentItem;
-
 public:
     explicit SessionSelectMenu(UserInterface& ui_) : Menu(ui_), currentItem(0) {}
 
@@ -131,6 +123,14 @@ public:
     void middlePressHandler() override;
     void rightPressHandler() override;
     void updateDisplay(LiquidCrystal*) override;
+
+private:
+    enum : int8_t {
+        ITEM_MORNING = 0,
+        ITEM_EVENING,
+        NUM_OF_ITEMS
+    };
+    int8_t currentItem;
 };
 
 /**
@@ -143,6 +143,15 @@ public:
  */
 class SessionSetupMenu : public Menu
 {
+public:
+    explicit SessionSetupMenu(UserInterface& ui_);
+
+    void initalize(LiquidCrystal*) override;
+    void leftPressHandler() override;
+    void middlePressHandler() override;
+    void rightPressHandler() override;
+    void updateDisplay(LiquidCrystal*) override;
+
 private:
     enum Settings : int8_t {
         ACTIVITY, THRESHOLD,
@@ -155,15 +164,6 @@ private:
     static const uint8_t settingsLcdColumns[NUM_OF_SETTINGS];
     uint8_t tempSettings[NUM_OF_SETTINGS];
     uint8_t currentPos;
-
-public:
-    explicit SessionSetupMenu(UserInterface& ui_);
-
-    void initalize(LiquidCrystal*) override;
-    void leftPressHandler() override;
-    void middlePressHandler() override;
-    void rightPressHandler() override;
-    void updateDisplay(LiquidCrystal*) override;
 };
 
 /**
@@ -173,14 +173,6 @@ public:
  */
 class UserInterface
 {
-private:
-    MainMenu mainMenu;
-    SettingSelectMenu settingSelectMenu;
-    ClockSetupMenu clockSetupMenu;
-    SessionSelectMenu sessionSelectMenu;
-    SessionSetupMenu sessionSetupMenu;
-    Menu* currentMenu;
-
 public:
     enum Sound : uint8_t {
         DISPLAY_AWAKE,
@@ -210,4 +202,12 @@ public:
     void onRightPress();
     void updateDisplay();
     void resetMenu();
+
+private:
+    MainMenu mainMenu;
+    SettingSelectMenu settingSelectMenu;
+    ClockSetupMenu clockSetupMenu;
+    SessionSelectMenu sessionSelectMenu;
+    SessionSetupMenu sessionSetupMenu;
+    Menu* currentMenu;
 };

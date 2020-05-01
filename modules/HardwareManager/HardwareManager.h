@@ -12,9 +12,6 @@
 /** Фасад для аппаратного обеспечения системы. */
 class HardwareManager
 {
-private:
-    LiquidCrystal* lcd;
-
 public:
     enum PressEvent : uint8_t {
         PRESS_LEFT   = 1 << 0,
@@ -60,4 +57,7 @@ public:
      * вызовом HardwareManager::createDisplay(), иначе nullptr.
      */
     LiquidCrystal* getDisplay() { return lcd; }
+
+private:
+    LiquidCrystal* lcd;
 };

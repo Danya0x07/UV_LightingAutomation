@@ -1,14 +1,14 @@
 #include "HardwareManager.h"
 
 HardwareManager::HardwareManager()
-    : lcd(nullptr),
-    leftButton(10, PULLUP),
+    : leftButton(10, PULLUP),
     middleButton(11, PULLUP),
     rightButton(9, PULLUP),
     relay(A1, INVERTED),
     buzzer(8, NORMAL),
     clock(A3, A2),
-    lightSensor(A6)
+    lightSensor(A6),
+    lcd(nullptr)
 {
 }
 

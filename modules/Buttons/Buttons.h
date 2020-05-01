@@ -13,9 +13,6 @@
  */
 class Button : private DigitalOnePinDevice
 {
-private:
-    bool lastState;
-
 public:
     explicit Button(uint8_t pin_, bool inverted_);
 
@@ -37,4 +34,7 @@ public:
      * Предназначена для обнаружения многократных нажатий.
      */
     bool hasBeenPressedAgain();
+
+private:
+    bool lastState;
 };

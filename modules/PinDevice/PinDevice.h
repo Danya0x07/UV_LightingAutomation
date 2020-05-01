@@ -11,10 +11,6 @@
  */
 class DigitalOnePinDevice
 {
-protected:
-    const uint8_t pin;
-    const bool inverted;
-
 public:
     /**
      * pin_: нормер контакта в представлении Arduino;
@@ -32,4 +28,8 @@ public:
     bool getState() {
         return bool(digitalRead(pin)) != inverted;
     }
+
+protected:
+    const uint8_t pin;
+    const bool inverted;
 };
