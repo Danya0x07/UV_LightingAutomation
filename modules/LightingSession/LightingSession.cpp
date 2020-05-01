@@ -44,15 +44,20 @@ bool LightingSession::hasToBeUnderway(const DateTime& currentTime, uint8_t light
 
     /*
      * Если после начала сеанса порог освещённости был достигнут,
-     * то далее сеанс продолжается до своего временного конца,
-     * даже если освещённость будет выше порога. Иначе будет эффект дребезга.
+     * то далее освещённость не влияет на прохождение сеанса, даже если снова
+     * перейдёт порог. Иначе будет эффект дребезга.
      */
-    if (lightLevel <= lightThreshold)
+    if ((trigger == ON_LIGHT_INCREASING && lightLevel >= lightThreshold) ||
+            (trigger == ON_LIGHT_DECREASING && lightLevel <= lightThreshold))
         thresholdReached = true;
+
     if (!timeIsInSessionBounds)
         thresholdReached = false;
 
-    return isActive && timeIsInSessionBounds && thresholdReached;
+    bool lightLevelIsSuitable = (trigger == ON_LIGHT_INCREASING && !thresholdReached) ||
+                                (trigger == ON_LIGHT_DECREASING && thresholdReached);
+
+    return isActive && timeIsInSessionBounds && lightLevelIsSuitable;
 }
 
 void LightingSession::setLightThreshold(uint8_t threshold)
