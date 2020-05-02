@@ -14,13 +14,17 @@ UserInterface ui(hardware, sessions);
 
 TaskHandle_t updateDisplayTaskHandle;
 TimerHandle_t disableUiTimerHandle;
+TimerHandle_t buttonHoldTimerHandle;
+TimerHandle_t repeatPressTimerHandle;
 
-void checkButtonsTask(void* unused);
-void performLightingTask(void* unused);
-void updateDisplayTask(void* unused);
+void checkButtonsTask(void*);
+void performLightingTask(void*);
+void updateDisplayTask(void*);
 
 void enableUI();
-void disableUI(TimerHandle_t unused);
+void disableUI(TimerHandle_t);
+void startRepeatingPress(TimerHandle_t);
+void repeatPress(TimerHandle_t);
 
 void setup()
 {
@@ -40,7 +44,13 @@ void setup()
     disableUiTimerHandle = xTimerCreate("uidis", pdMS_TO_TICKS(10000),
                                         pdFALSE, NULL, disableUI);
 
-    xTimerStart(disableUiTimerHandle, 100);
+    buttonHoldTimerHandle = xTimerCreate("btnhld", pdMS_TO_TICKS(1200),
+                                         pdFALSE, NULL, startRepeatingPress);
+
+    repeatPressTimerHandle = xTimerCreate("rprss", pdMS_TO_TICKS(200),
+                                          pdTRUE, NULL, repeatPress);
+
+    xTimerStart(disableUiTimerHandle, 10);
 }
 
 void loop()  // вызывается во время простоя
@@ -54,19 +64,20 @@ void checkButtonsTask(void* unused)
     uint8_t events = 0;
 
     for (;;) {
-        events = hardware.getPressEvents();
+        events = hardware.getButtonsEvents();
 
-        if (events != 0) {
+        if (events == 0) {
+            xTimerStop(buttonHoldTimerHandle, 10);
+            xTimerStop(repeatPressTimerHandle, 10);
+        } else if (events & HardwareManager::PRESS_OCCURED_MASK) {
             enableUI();
-        }
-        if (events & HardwareManager::PRESS_LEFT) {
-            ui.onLeftPress();
-        }
-        if (events & HardwareManager::PRESS_MIDDLE) {
-            ui.onMiddlePress();
-        }
-        if (events & HardwareManager::PRESS_RIGHT) {
-            ui.onRightPress();
+            if (events & HardwareManager::PRESS_LEFT)
+                ui.onLeftPress();
+            if (events & HardwareManager::PRESS_MIDDLE)
+                ui.onMiddlePress();
+            if (events & HardwareManager::PRESS_RIGHT)
+                ui.onRightPress();
+            xTimerReset(buttonHoldTimerHandle, 10);
         }
 
         vTaskDelay(pdMS_TO_TICKS(100));
@@ -77,7 +88,8 @@ void performLightingTask(void* unused)
 {
     DateTime currentTime;
     uint16_t lightLevel;
-    // Чтобы автоматическое переключение реле не конфликтовала с ручным.
+
+    // Чтобы автоматическое переключение реле не конфликтовало с ручным.
     bool relayHasBeenEnabled = false;
 
     for (;;) {
@@ -104,7 +116,7 @@ void updateDisplayTask(void* unused)
 {
     for (;;) {
         ui.updateDisplay();
-        vTaskDelay(pdMS_TO_TICKS(333));
+        vTaskDelay(pdMS_TO_TICKS(200));
     }
 }
 
@@ -112,7 +124,7 @@ void enableUI()
 {
     hardware.enableDisplay();
     vTaskResume(updateDisplayTaskHandle);
-    xTimerReset(disableUiTimerHandle, 100);
+    xTimerReset(disableUiTimerHandle, 10);
 }
 
 void disableUI(TimerHandle_t unused)
@@ -120,4 +132,15 @@ void disableUI(TimerHandle_t unused)
     hardware.disableDisplay();
     ui.resetMenu();
     vTaskSuspend(updateDisplayTaskHandle);
+}
+
+void startRepeatingPress(TimerHandle_t unused)
+{
+    xTimerReset(repeatPressTimerHandle, 10);
+}
+
+void repeatPress(TimerHandle_t unused)
+{
+    enableUI();
+    ui.onPressRepeat();
 }

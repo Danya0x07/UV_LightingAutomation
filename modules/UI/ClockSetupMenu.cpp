@@ -26,7 +26,7 @@ const uint8_t ClockSetupMenu::settingsLcdColumns[NUM_OF_SETTINGS] = {
 };
 
 ClockSetupMenu::ClockSetupMenu(UserInterface& ui_)
-    : Menu(ui_), tempSettings{}, currentPos(0)
+    : Menu(ui_), tempSettings{}, currentPos(0), lastHandler(nullptr)
 {
 
 }
@@ -58,6 +58,7 @@ void ClockSetupMenu::leftPressHandler()
         setting = minSettingsBounds[currentPos];
     }
     tempSettings[currentPos] = setting;
+    lastHandler = &ClockSetupMenu::leftPressHandler;
 }
 
 void ClockSetupMenu::middlePressHandler()
@@ -68,6 +69,7 @@ void ClockSetupMenu::middlePressHandler()
         setting = maxSettingsBounds[currentPos];
     }
     tempSettings[currentPos] = setting;
+    lastHandler = &ClockSetupMenu::middlePressHandler;
 }
 
 void ClockSetupMenu::rightPressHandler()
@@ -82,6 +84,14 @@ void ClockSetupMenu::rightPressHandler()
         currentPos = 0;   // на всякий случай
     } else {
         ui.makeSound(UserInterface::CONFIRM_VALUE);
+    }
+    lastHandler = nullptr;
+}
+
+void ClockSetupMenu::pressRepeatHandler()
+{
+    if (lastHandler != nullptr) {
+        (this->*lastHandler)();
     }
 }
 

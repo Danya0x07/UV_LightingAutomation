@@ -44,6 +44,11 @@ void UserInterface::onRightPress()
     currentMenu->rightPressHandler();
 }
 
+void UserInterface::onPressRepeat()
+{
+    currentMenu->pressRepeatHandler();
+}
+
 void UserInterface::updateDisplay()
 {
     currentMenu->updateDisplay(hardware.getDisplay());

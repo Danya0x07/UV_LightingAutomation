@@ -20,6 +20,7 @@ public:
     virtual void leftPressHandler() = 0;
     virtual void middlePressHandler() = 0;
     virtual void rightPressHandler() = 0;
+    virtual void pressRepeatHandler() {}
     virtual void updateDisplay(LiquidCrystal*) = 0;
 
 protected:
@@ -92,6 +93,7 @@ public:
     void leftPressHandler() override;
     void middlePressHandler() override;
     void rightPressHandler() override;
+    void pressRepeatHandler() override;
     void updateDisplay(LiquidCrystal*) override;
 
 private:
@@ -101,6 +103,8 @@ private:
     static const uint8_t settingsLcdColumns[NUM_OF_SETTINGS];
     int8_t tempSettings[NUM_OF_SETTINGS];
     uint8_t currentPos;
+
+    void (ClockSetupMenu::*lastHandler)();
 
     static void validateDate(int8_t* day, int8_t month, int16_t year);
 };
@@ -150,6 +154,7 @@ public:
     void leftPressHandler() override;
     void middlePressHandler() override;
     void rightPressHandler() override;
+    void pressRepeatHandler() override;
     void updateDisplay(LiquidCrystal*) override;
 
 private:
@@ -164,6 +169,8 @@ private:
     static const uint8_t settingsLcdColumns[NUM_OF_SETTINGS];
     uint8_t tempSettings[NUM_OF_SETTINGS];
     uint8_t currentPos;
+
+    void (SessionSetupMenu::*lastHandler)();
 };
 
 /**
@@ -200,6 +207,7 @@ public:
     void onLeftPress();
     void onMiddlePress();
     void onRightPress();
+    void onPressRepeat();
     void updateDisplay();
     void resetMenu();
 

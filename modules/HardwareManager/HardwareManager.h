@@ -13,11 +13,15 @@
 class HardwareManager
 {
 public:
-    enum PressEvent : uint8_t {
+    enum ButtonEvent : uint8_t {
         PRESS_LEFT   = 1 << 0,
         PRESS_MIDDLE = 1 << 1,
-        PRESS_RIGHT  = 1 << 2
+        PRESS_RIGHT  = 1 << 2,
+        HOLD_LEFT   = 1 << 3,
+        HOLD_MIDDLE = 1 << 4,
+        HOLD_RIGHT  = 1 << 5
     };
+    static const uint8_t PRESS_OCCURED_MASK = 0x07;
 
     Button leftButton;
     Button middleButton;
@@ -32,10 +36,10 @@ public:
     HardwareManager& operator=(const HardwareManager& copy) = delete;
 
     /**
-     * Возвращает битовую маску из перечисление PressEvent, содержащую
-     * произошедшие в момент вызова нажатия.
+     * Возвращает битовую маску из перечисление ButtonEvent,
+     * содержащую текущее состояние кнопок.
      */
-    uint8_t getPressEvents();
+    uint8_t getButtonsEvents();
 
     /** Возвращает текущий уровень освещённости в диапазоне (0 - 100). */
     uint16_t getLightLevel();

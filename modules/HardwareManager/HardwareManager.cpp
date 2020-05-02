@@ -12,18 +12,24 @@ HardwareManager::HardwareManager()
 {
 }
 
-uint8_t HardwareManager::getPressEvents()
+uint8_t HardwareManager::getButtonsEvents()
 {
     uint8_t pressEvents = 0;
-    if (leftButton.hasBeenPressed()) {
+
+    if (leftButton.hasBeenPressed())
         pressEvents |= PRESS_LEFT;
-    }
-    if (middleButton.hasBeenPressed()) {
+    if (middleButton.hasBeenPressed())
         pressEvents |= PRESS_MIDDLE;
-    }
-    if (rightButton.hasBeenPressed()) {
+    if (rightButton.hasBeenPressed())
         pressEvents |= PRESS_RIGHT;
-    }
+
+    if (leftButton.isPressed())
+        pressEvents |= HOLD_LEFT;
+    if (middleButton.isPressed())
+        pressEvents |= HOLD_MIDDLE;
+    if (rightButton.isPressed())
+        pressEvents |= HOLD_RIGHT;
+
     return pressEvents;
 }
 

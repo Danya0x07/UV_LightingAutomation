@@ -11,7 +11,7 @@ const uint8_t SessionSetupMenu::settingsLcdColumns[NUM_OF_SETTINGS] = {
 };
 
 SessionSetupMenu::SessionSetupMenu(UserInterface& ui_)
-    : Menu(ui_), tempSettings{}, currentPos(0)
+    : Menu(ui_), tempSettings{}, currentPos(0), lastHandler(nullptr)
 {
 
 }
@@ -42,6 +42,7 @@ void SessionSetupMenu::leftPressHandler()
         setting = 0;
     }
     tempSettings[currentPos] = setting;
+    lastHandler = &SessionSetupMenu::leftPressHandler;
 }
 
 void SessionSetupMenu::middlePressHandler()
@@ -52,6 +53,7 @@ void SessionSetupMenu::middlePressHandler()
         setting = maxSettingsBounds[currentPos];
     }
     tempSettings[currentPos] = setting;
+    lastHandler = &SessionSetupMenu::middlePressHandler;
 }
 
 void SessionSetupMenu::rightPressHandler()
@@ -68,6 +70,14 @@ void SessionSetupMenu::rightPressHandler()
         ui.setMenu(ui.getMainMenu());
     } else {
         ui.makeSound(UserInterface::CONFIRM_VALUE);
+    }
+    lastHandler = nullptr;
+}
+
+void SessionSetupMenu::pressRepeatHandler()
+{
+    if (lastHandler != nullptr) {
+        (this->*lastHandler)();
     }
 }
 
