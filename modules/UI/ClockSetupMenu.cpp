@@ -40,6 +40,7 @@ void ClockSetupMenu::initalize(LiquidCrystal* lcd)
     tempSettings[MONTH]  = settings.month();
     tempSettings[DAY]    = settings.day();
     currentPos = 0;
+    lastHandler = nullptr;
 
     if (lcd != nullptr) {
         lcd->setCursor(0, 0);

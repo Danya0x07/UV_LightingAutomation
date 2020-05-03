@@ -37,11 +37,17 @@ void testMainMenuUI()
      * Тут левая кнопка ничего не делает (нужна просто для пробуждения экрана)
      * Средняя кнопка переключает состояние реле.
      * Правая кнопка осуществляет переход в меню выбора настроек.
+     * На удержание реакции нет.
      */
     ui.onMiddlePress();
     TEST_ASSERT_TRUE(hardware.relay.getState());
+
     delay(700);  // реле лучше резко не переключать
     ui.onMiddlePress();
+    TEST_ASSERT_FALSE(hardware.relay.getState());
+
+    delay(700);  // невозможно, но на всякий случай
+    ui.onPressHold();
     TEST_ASSERT_FALSE(hardware.relay.getState());
 }
 
@@ -66,13 +72,14 @@ void testSessionConfiguringUI()
     ui.setMenu(ui.getSessionSetupMenu());  // входим в меню настройки сеанса
 
     /* Настраиваем активность. */
-    ui.onLeftPress();  // переключаем параметр active вечернего сеанса с 0 на 1
+    ui.onLeftPress();   // переключаем активность вечернего сеанса с 0 на 1
     ui.onRightPress();  // подтверждаем и переходим к следующему параметру
     TEST_ASSERT_TRUE(sessions.evening.getActive());
 
     /* Настраиваем порог освещённости. */
-    for (uint8_t i = 0; i < 3; i++)
-        ui.onMiddlePress();  // уменьшаем значение порога освещённости с 31 до 28
+    for (uint8_t i = 0; i < 3 - 1; i++)
+        ui.onMiddlePress();  // уменьшаем порог освещённости с 31 до 29
+    ui.onPressHold();   // удержанием уменьшаем порог освещённости с 29 до 28
     ui.onRightPress();  // подтверждаем и переходим к следующему параметру
     TEST_ASSERT_EQUAL(28, sessions.evening.getLightThreshold());
 
@@ -83,20 +90,21 @@ void testSessionConfiguringUI()
     TEST_ASSERT_EQUAL(6, sessions.evening.getStartTime().hour());
 
     /* Настраиваем минуту начала. */
-    for (uint8_t i = 0; i < 20; i++)
-        ui.onLeftPress();  // увеличиваем минуты начала с 40 до 60, должны сброситься в 0
+    for (uint8_t i = 0; i < 20 - 1; i++)
+        ui.onLeftPress();  // увеличиваем минуту начала с 40 до 59
+    ui.onPressHold();   // удержанием уменьшаем минуту начала, переполняя через 59 --> 0
     ui.onRightPress();  // подтверждаем и переходим к следующему параметру
     TEST_ASSERT_EQUAL(0, sessions.evening.getStartTime().minute());
 
     /* Настраиваем час окончания. */
     for (uint8_t i = 0; i < 10; i++)
-        ui.onLeftPress();  // увеличиваем час окончания с 22 до 8, на 24 должен сброситься в 0
+        ui.onLeftPress();  // увеличиваем час окончания с 22 до 8, переполняя через 23 --> 0
     ui.onRightPress();  // подтверждаем и переходим к следующему параметру
     TEST_ASSERT_EQUAL(8, sessions.evening.getEndTime().hour());
 
     /* Настраиваем минуту окончания. */
     ui.onMiddlePress();  // уменьшаем минуту окончания с 21 до 20
-    ui.onRightPress();  // подтверждаем и выходим в главное меню
+    ui.onRightPress();   // подтверждаем и выходим в главное меню
     TEST_ASSERT_EQUAL(20, sessions.evening.getEndTime().minute());
     TEST_ASSERT_TRUE(ui.getMenu() == ui.getMainMenu());
 
@@ -111,7 +119,7 @@ void testSessionConfiguringUI()
     sessions.select(&sessions.morning);  // выбираем утренний сеанс
     ui.setMenu(ui.getSessionSetupMenu());  // входим в меню настройки сеанса
     ui.onMiddlePress();  // переключаем параметр active утреннего сеанса с 1 на 0
-    ui.onRightPress();  // подтверждаем и выходим в главное меню
+    ui.onRightPress();   // подтверждаем и выходим в главное меню
     TEST_ASSERT_TRUE(ui.getMenu() == ui.getMainMenu());
 }
 
@@ -135,31 +143,33 @@ void testClockConfiguringUI()
     ui.setMenu(ui.getClockSetupMenu());  // входим в меню настройки часов
 
     /* Настраиваем час. */
-    for (uint8_t i = 0; i < 22; i++)
-        ui.onLeftPress();  // уменьшаем час с 12 до 5, используя переполнение 23 --> 0
+    for (uint8_t i = 0; i < 22 - 1; i++)
+        ui.onLeftPress();  // уменьшаем час с 12 до 4, переполняя через 23 --> 0
+    ui.onPressHold();   // удержанием увеличиваем час с 4 до 5
     ui.onRightPress();  // подтверждаем и переходим к следующему параметру
     TEST_ASSERT_EQUAL(hardware.clock.getTime().hour(), target.hour());
 
     /* Настраиваем минуту. */
-    for (uint8_t i = 0; i < 3; i++)
-        ui.onMiddlePress();  // увеличиваем минуту с 1 до 58, используя переполнение 0 --> 59
+    for (uint8_t i = 0; i < 3 - 1; i++)
+        ui.onMiddlePress();  // увеличиваем минуту с 1 до 59, переполняя через 0 --> 59
+    ui.onPressHold();   // удержанием уменьшаем минуту с 59 до 58
     ui.onRightPress();  // подтверждаем и переходим к следующему параметру
     TEST_ASSERT_EQUAL(hardware.clock.getTime().minute(), target.minute());
 
     /* Настраиваем год. */
-    ui.onLeftPress();  // 18 + 1 == 19
-    ui.onLeftPress();  // 19 + 1 == 20
+    ui.onLeftPress();   // 18 + 1 == 19
+    ui.onLeftPress();   // 19 + 1 == 20
     ui.onRightPress();  // подтверждаем и переходим к следующему параметру
     TEST_ASSERT_EQUAL(hardware.clock.getTime().year(), target.year());
 
     /* Настраиваем месяц. */
-    ui.onLeftPress();  // 4 + 1 == 5
+    ui.onLeftPress();   // 4 + 1 == 5
     ui.onRightPress();  // подтверждаем и переходим к следующему параметру
     TEST_ASSERT_EQUAL(hardware.clock.getTime().month(), target.month());
 
     /* Настраиваем число. */
     ui.onMiddlePress();  // уменьшаем число с 7 до 6
-    ui.onRightPress();  // подтверждаем и выходим в главное меню
+    ui.onRightPress();   // подтверждаем и выходим в главное меню
     TEST_ASSERT_EQUAL(hardware.clock.getTime().day(), target.day());
     TEST_ASSERT_TRUE(ui.getMenu() == ui.getMainMenu());
 

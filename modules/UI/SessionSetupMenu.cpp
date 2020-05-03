@@ -24,6 +24,7 @@ void SessionSetupMenu::initalize(LiquidCrystal* lcd)
     selectedSession->getStartTime(&tempSettings[STARTHOUR], &tempSettings[STARTMINUTE]);
     selectedSession->getEndTime(&tempSettings[ENDHOUR], &tempSettings[ENDMINUTE]);
     currentPos = 0;
+    lastHandler = nullptr;
 
     if (lcd != nullptr) {
         lcd->setCursor(0, 0);
