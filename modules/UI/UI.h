@@ -16,12 +16,17 @@ class Menu
 public:
     explicit Menu(UserInterface& ui_) : ui(ui_) {}
 
+    /* Инициализация и обновление дисплея поддерживаются любым меню. */
     virtual void initalize(LiquidCrystal*) = 0;
+    virtual void update(LiquidCrystal*) = 0;
+
+    /* Обработчики однократных нажатий поддерживаются любым меню. */
     virtual void leftPressHandler() = 0;
     virtual void middlePressHandler() = 0;
     virtual void rightPressHandler() = 0;
-    virtual void pressRepeatHandler() {}
-    virtual void updateDisplay(LiquidCrystal*) = 0;
+
+    /* Некоторые меню могут поддерживать обаботчик удержания. */
+    virtual void pressHoldHandler() {}
 
 protected:
     UserInterface& ui;
@@ -42,10 +47,11 @@ public:
     explicit MainMenu(UserInterface& ui_) : Menu(ui_) {}
 
     void initalize(LiquidCrystal*) override;
+    void update(LiquidCrystal*) override;
+
     void leftPressHandler() override;
     void middlePressHandler() override;
     void rightPressHandler() override;
-    void updateDisplay(LiquidCrystal*) override;
 };
 
 /**
@@ -62,10 +68,11 @@ public:
     explicit SettingSelectMenu(UserInterface& ui_) : Menu(ui_), currentItem(0) {}
 
     void initalize(LiquidCrystal*) override;
+    void update(LiquidCrystal*) override;
+
     void leftPressHandler() override;
     void middlePressHandler() override;
     void rightPressHandler() override;
-    void updateDisplay(LiquidCrystal*) override;
 
 private:
     enum : int8_t {
@@ -90,11 +97,13 @@ public:
     explicit ClockSetupMenu(UserInterface& ui_);
 
     void initalize(LiquidCrystal*) override;
+    void update(LiquidCrystal*) override;
+
     void leftPressHandler() override;
     void middlePressHandler() override;
     void rightPressHandler() override;
-    void pressRepeatHandler() override;
-    void updateDisplay(LiquidCrystal*) override;
+
+    void pressHoldHandler() override;
 
 private:
     enum Settings : uint8_t {HOUR, MINUTE, YEAR, MONTH, DAY, NUM_OF_SETTINGS};
@@ -123,10 +132,11 @@ public:
     explicit SessionSelectMenu(UserInterface& ui_) : Menu(ui_), currentItem(0) {}
 
     void initalize(LiquidCrystal*) override;
+    void update(LiquidCrystal*) override;
+
     void leftPressHandler() override;
     void middlePressHandler() override;
     void rightPressHandler() override;
-    void updateDisplay(LiquidCrystal*) override;
 
 private:
     enum : int8_t {
@@ -151,11 +161,13 @@ public:
     explicit SessionSetupMenu(UserInterface& ui_);
 
     void initalize(LiquidCrystal*) override;
+    void update(LiquidCrystal*) override;
+
     void leftPressHandler() override;
     void middlePressHandler() override;
     void rightPressHandler() override;
-    void pressRepeatHandler() override;
-    void updateDisplay(LiquidCrystal*) override;
+
+    void pressHoldHandler() override;
 
 private:
     enum Settings : int8_t {
@@ -198,18 +210,18 @@ public:
     Menu* getClockSetupMenu() { return &clockSetupMenu; }
     Menu* getSessionSelectMenu() { return &sessionSelectMenu; }
     Menu* getSessionSetupMenu() { return &sessionSetupMenu; }
-#ifdef UNIT_TEST
     Menu* getMenu() { return currentMenu; }
-#endif
     void setMenu(Menu*);
+    void resetMenu();
 
-    void makeSound(Sound);
     void onLeftPress();
     void onMiddlePress();
     void onRightPress();
-    void onPressRepeat();
+    void onPressHold();
+
+    /* Несущественны для юнит-тестов. */
+    void makeSound(Sound);
     void updateDisplay();
-    void resetMenu();
 
 private:
     MainMenu mainMenu;

@@ -13,15 +13,20 @@
 class HardwareManager
 {
 public:
+
+    /** Перечисление событий кнопок. */
     enum ButtonEvent : uint8_t {
         PRESS_LEFT   = 1 << 0,
         PRESS_MIDDLE = 1 << 1,
         PRESS_RIGHT  = 1 << 2,
-        HOLD_LEFT   = 1 << 3,
-        HOLD_MIDDLE = 1 << 4,
-        HOLD_RIGHT  = 1 << 5
     };
-    static const uint8_t PRESS_OCCURED_MASK = 0x07;
+
+    /** Перечисление состояний кнопок. */
+    enum ButtonStatus : uint8_t {
+        PRESSED_LEFT   = 1 << 0,
+        PRESSED_MIDDLE = 1 << 1,
+        PRESSED_RIGHT  = 1 << 2
+    };
 
     Button leftButton;
     Button middleButton;
@@ -36,10 +41,16 @@ public:
     HardwareManager& operator=(const HardwareManager& copy) = delete;
 
     /**
-     * Возвращает битовую маску из перечисление ButtonEvent,
-     * содержащую текущее состояние кнопок.
+     * Возвращает битовую маску из перечисления ButtonEvent,
+     * содержащую события кнопок, произошедшие со времени последнего вызова.
      */
     uint8_t getButtonsEvents();
+
+    /**
+     * Возвращает битовую маску из перечисления ButtonStatus,
+     * содержащую текущее состояние кнопок.
+     */
+    uint8_t getButtonsStatus();
 
     /** Возвращает текущий уровень освещённости в диапазоне (0 - 100). */
     uint16_t getLightLevel();
@@ -50,10 +61,10 @@ public:
      */
     void createDisplay();
 
-    /** Включает подсветку дисплея и отображение на нём данных. */
+    /** Включает подсветку дисплея (если он есть) и отображение на нём данных. */
     void enableDisplay();
 
-    /** Выключает подсветку дисплея и отображение на нём данных. */
+    /** Выключает подсветку дисплея (если он есть) и отображение на нём данных. */
     void disableDisplay();
 
     /**

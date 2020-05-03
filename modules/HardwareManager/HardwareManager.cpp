@@ -23,14 +23,21 @@ uint8_t HardwareManager::getButtonsEvents()
     if (rightButton.hasBeenPressed())
         pressEvents |= PRESS_RIGHT;
 
-    if (leftButton.isPressed())
-        pressEvents |= HOLD_LEFT;
-    if (middleButton.isPressed())
-        pressEvents |= HOLD_MIDDLE;
-    if (rightButton.isPressed())
-        pressEvents |= HOLD_RIGHT;
-
     return pressEvents;
+}
+
+uint8_t HardwareManager::getButtonsStatus()
+{
+    uint8_t pressStatus = 0;
+
+    if (leftButton.isPressed())
+        pressStatus |= PRESSED_LEFT;
+    if (middleButton.isPressed())
+        pressStatus |= PRESSED_MIDDLE;
+    if (rightButton.isPressed())
+        pressStatus |= PRESSED_RIGHT;
+
+    return pressStatus;
 }
 
 uint16_t HardwareManager::getLightLevel()

@@ -18,15 +18,9 @@ void UserInterface::setMenu(Menu* menu)
     currentMenu = menu;
 }
 
-void UserInterface::makeSound(Sound sound)
+void UserInterface::resetMenu()
 {
-    switch (sound)
-    {
-    case DISPLAY_AWAKE:   hardware.buzzer.buzz(1, 150); break;
-    case CHANGE_VALUE:    hardware.buzzer.buzz(1, 80);  break;
-    case CONFIRM_VALUE:   hardware.buzzer.buzz(1, 200); break;
-    case MENU_TRANSITION: hardware.buzzer.buzz(2, 100); break;
-    }
+    setMenu(&mainMenu);
 }
 
 void UserInterface::onLeftPress()
@@ -44,17 +38,23 @@ void UserInterface::onRightPress()
     currentMenu->rightPressHandler();
 }
 
-void UserInterface::onPressRepeat()
+void UserInterface::onPressHold()
 {
-    currentMenu->pressRepeatHandler();
+    currentMenu->pressHoldHandler();
+}
+
+void UserInterface::makeSound(Sound sound)
+{
+    switch (sound)
+    {
+    case DISPLAY_AWAKE:   hardware.buzzer.buzz(1, 150); break;
+    case CHANGE_VALUE:    hardware.buzzer.buzz(1, 80);  break;
+    case CONFIRM_VALUE:   hardware.buzzer.buzz(1, 200); break;
+    case MENU_TRANSITION: hardware.buzzer.buzz(2, 100); break;
+    }
 }
 
 void UserInterface::updateDisplay()
 {
-    currentMenu->updateDisplay(hardware.getDisplay());
-}
-
-void UserInterface::resetMenu()
-{
-    setMenu(&mainMenu);
+    currentMenu->update(hardware.getDisplay());
 }

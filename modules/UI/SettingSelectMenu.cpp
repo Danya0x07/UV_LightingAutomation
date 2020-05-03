@@ -14,6 +14,17 @@ void SettingSelectMenu::initalize(LiquidCrystal* lcd)
     }
 }
 
+void SettingSelectMenu::update(LiquidCrystal* lcd)
+{
+    if (lcd == nullptr)
+        return;
+
+    for (uint8_t i = 0; i < NUM_OF_ITEMS; i++) {
+        lcd->setCursor(0, i);
+        lcd->print(currentItem == i ? '>' : ' ');
+    }
+}
+
 void SettingSelectMenu::leftPressHandler()
 {
     if (--currentItem < 0)
@@ -43,15 +54,3 @@ void SettingSelectMenu::rightPressHandler()
         break;
     }
 }
-
-void SettingSelectMenu::updateDisplay(LiquidCrystal* lcd)
-{
-    if (lcd == nullptr)
-        return;
-
-    for (uint8_t i = 0; i < NUM_OF_ITEMS; i++) {
-        lcd->setCursor(0, i);
-        lcd->print(currentItem == i ? '>' : ' ');
-    }
-}
-

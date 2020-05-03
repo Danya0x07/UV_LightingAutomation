@@ -34,6 +34,29 @@ void SessionSetupMenu::initalize(LiquidCrystal* lcd)
     }
 }
 
+void SessionSetupMenu::update(LiquidCrystal* lcd)
+{
+    if (lcd == nullptr)
+        return;
+
+    for (uint8_t i = 0; i < NUM_OF_SETTINGS; i++) {
+        lcd->setCursor(settingsLcdColumns[i], settingsLcdRows[i]);
+        if (i == THRESHOLD) {
+            lcd->print(tempSettings[i]);
+            lcd->print('%');
+            if (tempSettings[i] < 100)
+                lcd->print(' ');
+            if (tempSettings[i] < 10)
+                lcd->print(' ');
+        } else {
+            if (tempSettings[i] < 10 && i != ACTIVITY)
+                lcd->print('0');
+            lcd->print(tempSettings[i]);
+        }
+    }
+    lcd->setCursor(settingsLcdColumns[currentPos], settingsLcdRows[currentPos]);
+}
+
 void SessionSetupMenu::leftPressHandler()
 {
     ui.makeSound(UserInterface::CHANGE_VALUE);
@@ -74,33 +97,9 @@ void SessionSetupMenu::rightPressHandler()
     lastHandler = nullptr;
 }
 
-void SessionSetupMenu::pressRepeatHandler()
+void SessionSetupMenu::pressHoldHandler()
 {
     if (lastHandler != nullptr) {
         (this->*lastHandler)();
     }
 }
-
-void SessionSetupMenu::updateDisplay(LiquidCrystal* lcd)
-{
-    if (lcd == nullptr)
-        return;
-
-    for (uint8_t i = 0; i < NUM_OF_SETTINGS; i++) {
-        lcd->setCursor(settingsLcdColumns[i], settingsLcdRows[i]);
-        if (i == THRESHOLD) {
-            lcd->print(tempSettings[i]);
-            lcd->print('%');
-            if (tempSettings[i] < 100)
-                lcd->print(' ');
-            if (tempSettings[i] < 10)
-                lcd->print(' ');
-        } else {
-            if (tempSettings[i] < 10 && i != ACTIVITY)
-                lcd->print('0');
-            lcd->print(tempSettings[i]);
-        }
-    }
-    lcd->setCursor(settingsLcdColumns[currentPos], settingsLcdRows[currentPos]);
-}
-

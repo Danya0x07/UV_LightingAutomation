@@ -22,6 +22,7 @@ void testButtons()
     TEST_ASSERT_FALSE(hardware.middleButton.isPressed());
     TEST_ASSERT_FALSE(hardware.rightButton.isPressed());
     TEST_ASSERT_EQUAL(0, hardware.getButtonsEvents());
+    TEST_ASSERT_EQUAL(0, hardware.getButtonsStatus());
 }
 
 void testClock()

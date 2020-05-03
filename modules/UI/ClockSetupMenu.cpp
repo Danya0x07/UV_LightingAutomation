@@ -50,9 +50,23 @@ void ClockSetupMenu::initalize(LiquidCrystal* lcd)
     }
 }
 
+void ClockSetupMenu::update(LiquidCrystal* lcd)
+{
+    if (lcd == nullptr)
+        return;
+
+    for (uint8_t i = 0; i < NUM_OF_SETTINGS; i++) {
+        lcd->setCursor(settingsLcdColumns[i], 1);
+        if (tempSettings[i] < 10)
+            lcd->print('0');
+        lcd->print(tempSettings[i]);
+    }
+    lcd->setCursor(settingsLcdColumns[currentPos], 1);
+}
+
 void ClockSetupMenu::leftPressHandler()
 {
-   ui.makeSound(UserInterface::CHANGE_VALUE);
+    ui.makeSound(UserInterface::CHANGE_VALUE);
     int8_t setting = tempSettings[currentPos];
     if (++setting > maxSettingsBounds[currentPos]) {
         setting = minSettingsBounds[currentPos];
@@ -88,25 +102,11 @@ void ClockSetupMenu::rightPressHandler()
     lastHandler = nullptr;
 }
 
-void ClockSetupMenu::pressRepeatHandler()
+void ClockSetupMenu::pressHoldHandler()
 {
     if (lastHandler != nullptr) {
         (this->*lastHandler)();
     }
-}
-
-void ClockSetupMenu::updateDisplay(LiquidCrystal* lcd)
-{
-    if (lcd == nullptr)
-        return;
-
-    for (uint8_t i = 0; i < NUM_OF_SETTINGS; i++) {
-        lcd->setCursor(settingsLcdColumns[i], 1);
-        if (tempSettings[i] < 10)
-            lcd->print('0');
-        lcd->print(tempSettings[i]);
-    }
-    lcd->setCursor(settingsLcdColumns[currentPos], 1);
 }
 
 void ClockSetupMenu::validateDate(int8_t* day, int8_t month, int16_t year)

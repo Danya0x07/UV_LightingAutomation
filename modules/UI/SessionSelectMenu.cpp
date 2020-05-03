@@ -14,6 +14,17 @@ void SessionSelectMenu::initalize(LiquidCrystal* lcd)
     }
 }
 
+void SessionSelectMenu::update(LiquidCrystal* lcd)
+{
+    if (lcd == nullptr)
+        return;
+
+    for (uint8_t i = 0; i < NUM_OF_ITEMS; i++) {
+        lcd->setCursor(0, i);
+        lcd->print(currentItem == i ? '>' : ' ');
+    }
+}
+
 void SessionSelectMenu::leftPressHandler()
 {
     if (--currentItem < 0)
@@ -44,15 +55,3 @@ void SessionSelectMenu::rightPressHandler()
     }
     ui.setMenu(ui.getSessionSetupMenu());
 }
-
-void SessionSelectMenu::updateDisplay(LiquidCrystal* lcd)
-{
-    if (lcd == nullptr)
-        return;
-
-    for (uint8_t i = 0; i < NUM_OF_ITEMS; i++) {
-        lcd->setCursor(0, i);
-        lcd->print(currentItem == i ? '>' : ' ');
-    }
-}
-

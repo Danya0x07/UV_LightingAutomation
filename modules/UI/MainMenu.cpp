@@ -11,24 +11,7 @@ void MainMenu::initalize(LiquidCrystal* lcd)
     }
 }
 
-void MainMenu::leftPressHandler()
-{
-    ui.makeSound(UserInterface::DISPLAY_AWAKE);
-}
-
-void MainMenu::middlePressHandler()
-{
-    ui.makeSound(UserInterface::DISPLAY_AWAKE);
-    ui.hardware.relay.switchState();
-}
-
-void MainMenu::rightPressHandler()
-{
-    ui.makeSound(UserInterface::MENU_TRANSITION);
-    ui.setMenu(ui.getSettingSelectMenu());
-}
-
-void MainMenu::updateDisplay(LiquidCrystal* lcd)
+void MainMenu::update(LiquidCrystal* lcd)
 {
     DateTime dateTime = ui.hardware.clock.getTime();
     uint8_t hour = dateTime.hour();
@@ -87,4 +70,21 @@ void MainMenu::updateDisplay(LiquidCrystal* lcd)
     lcd->setCursor(14, 1);
     lcd->print(performedSessions & SessionManager::SESSION_MORNING ? 'M' : ' ');
     lcd->print(performedSessions & SessionManager::SESSION_EVENING ? 'E' : ' ');
+}
+
+void MainMenu::leftPressHandler()
+{
+    ui.makeSound(UserInterface::DISPLAY_AWAKE);
+}
+
+void MainMenu::middlePressHandler()
+{
+    ui.makeSound(UserInterface::DISPLAY_AWAKE);
+    ui.hardware.relay.switchState();
+}
+
+void MainMenu::rightPressHandler()
+{
+    ui.makeSound(UserInterface::MENU_TRANSITION);
+    ui.setMenu(ui.getSettingSelectMenu());
 }

@@ -8,13 +8,18 @@
 #include <SessionManager.h>
 #include <UI.h>
 
+/*
+ * Возможно, сам собой интуитивно в ходе рефакторинга получился какой-то
+ * архитектурный паттерн. Честно говоря, пока не знаю такого паттерна.
+ * Точно не MVC, не похоже, но выглядит красиво.
+ */
 HardwareManager hardware;
 SessionManager sessions;
 UserInterface ui(hardware, sessions);
 
 TaskHandle_t updateDisplayTaskHandle;
 TimerHandle_t disableUiTimerHandle;
-TimerHandle_t buttonHoldTimerHandle;
+TimerHandle_t pressHoldTimerHandle;
 TimerHandle_t repeatPressTimerHandle;
 
 void checkButtonsTask(void*);
@@ -44,16 +49,16 @@ void setup()
     disableUiTimerHandle = xTimerCreate("uidis", pdMS_TO_TICKS(10000),
                                         pdFALSE, NULL, disableUI);
 
-    buttonHoldTimerHandle = xTimerCreate("btnhld", pdMS_TO_TICKS(1200),
+    pressHoldTimerHandle = xTimerCreate("btnhld", pdMS_TO_TICKS(1100),
                                          pdFALSE, NULL, startRepeatingPress);
 
     repeatPressTimerHandle = xTimerCreate("rprss", pdMS_TO_TICKS(200),
                                           pdTRUE, NULL, repeatPress);
 
-    xTimerStart(disableUiTimerHandle, 10);
+    xTimerStart(disableUiTimerHandle, 0);
 }
 
-void loop()  // вызывается во время простоя
+void loop()  // вызывается планировщиком во время простоя
 {
     set_sleep_mode(SLEEP_MODE_PWR_DOWN);
     sleep_mode();
@@ -61,15 +66,18 @@ void loop()  // вызывается во время простоя
 
 void checkButtonsTask(void* unused)
 {
-    uint8_t events = 0;
+    uint8_t events = 0, status = 0;
 
     for (;;) {
         events = hardware.getButtonsEvents();
+        status = hardware.getButtonsStatus();
 
-        if (events == 0) {
-            xTimerStop(buttonHoldTimerHandle, 10);
-            xTimerStop(repeatPressTimerHandle, 10);
-        } else if (events & HardwareManager::PRESS_OCCURED_MASK) {
+        if (status == 0) {
+            xTimerStop(pressHoldTimerHandle, 0);
+            xTimerStop(repeatPressTimerHandle, 0);
+        }
+
+        if (events != 0) {
             enableUI();
             if (events & HardwareManager::PRESS_LEFT)
                 ui.onLeftPress();
@@ -77,7 +85,7 @@ void checkButtonsTask(void* unused)
                 ui.onMiddlePress();
             if (events & HardwareManager::PRESS_RIGHT)
                 ui.onRightPress();
-            xTimerReset(buttonHoldTimerHandle, 10);
+            xTimerReset(pressHoldTimerHandle, 0);
         }
 
         vTaskDelay(pdMS_TO_TICKS(100));
@@ -89,7 +97,7 @@ void performLightingTask(void* unused)
     DateTime currentTime;
     uint16_t lightLevel;
 
-    // Чтобы автоматическое переключение реле не конфликтовало с ручным.
+    /* Чтобы автоматическое переключение реле не конфликтовало с ручным. */
     bool relayHasBeenEnabled = false;
 
     for (;;) {
@@ -124,7 +132,7 @@ void enableUI()
 {
     hardware.enableDisplay();
     vTaskResume(updateDisplayTaskHandle);
-    xTimerReset(disableUiTimerHandle, 10);
+    xTimerReset(disableUiTimerHandle, 0);
 }
 
 void disableUI(TimerHandle_t unused)
@@ -136,11 +144,11 @@ void disableUI(TimerHandle_t unused)
 
 void startRepeatingPress(TimerHandle_t unused)
 {
-    xTimerReset(repeatPressTimerHandle, 10);
+    xTimerReset(repeatPressTimerHandle, 0);
 }
 
 void repeatPress(TimerHandle_t unused)
 {
     enableUI();
-    ui.onPressRepeat();
+    ui.onPressHold();
 }

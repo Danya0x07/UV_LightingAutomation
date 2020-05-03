@@ -69,7 +69,7 @@
 /* Timer definitions. */
 #define configUSE_TIMERS                    1
 #define configTIMER_TASK_PRIORITY           ( ( UBaseType_t ) 3 )
-#define configTIMER_QUEUE_LENGTH            ( ( UBaseType_t ) 5 )
+#define configTIMER_QUEUE_LENGTH            ( ( UBaseType_t ) 8 )
 #define configTIMER_TASK_STACK_DEPTH        ( 85 )
 
 /* Co-routine definitions. */
